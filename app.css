@@ -1,0 +1,37 @@
+button:not(:first-child) {
+	all: unset;
+	margin: 8px;
+	border-radius: 5px;
+	min-width: 32px;
+	color: transparent;
+	min-height: 32px;
+}
+
+.color-display box {
+	all: unset;
+	min-height: 48px;
+}
+
+.color-display {
+	margin: 8px;
+}
+
+.color-display box:first-child  {
+	border-radius: 5px 0 0 5px;
+}
+
+.color-display box:last-child  {
+	border-radius: 0 5px 5px 0;
+}
+
+.color-button {
+	box-shadow: 1px 1px 2px 0px #f0f0f0;
+}
+
+.color-row {
+	margin: 8px 8px 0 8px;
+	background: #fafafa;
+	padding: 13px;
+	border-radius: 5px;
+}
+.color-label { font-family: monospace; }
