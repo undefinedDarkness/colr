@@ -1,7 +1,7 @@
-  _   _   _   _   _   _   _   _   _   _  
- / \ / \ / \ / \ / \ / \ / \ / \ / \ / \ 
-( c | o | l | r | - | p | i | c | k | r )
- \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ 
+  _   _   _   _      _   _   _   _   _
+ / \ / \ / \ / \    / \ / \ / \ / \ / \
+( c | o | l | r |  | p | i | c | k | r )
+ \_/ \_/ \_/ \_/    \_/ \_/ \_/ \_/ \_/ 
 
 A simple color picker GUI for X11.
 
@@ -20,5 +20,9 @@ X11 Development Headers   (libx11-dev)
 
 TODO
 ----
-- Save picked colors to a file
+- Save picked colors to a file  DONE
+- Deal with duplicate colors 
 - Edit colors
+- Placeholder Image
+- Refactor some single callbacks
+- Move some functions around

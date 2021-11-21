@@ -1,10 +1,11 @@
 struct Color {
-	unsigned int r;
-	unsigned int g;
-	unsigned int b;
+	int r;
+	int g;
+	int b;
 };
-struct Color pick_color ();
+struct Color color_pick ();
 struct Color color_apply (struct Color *c, int amount);
+struct Color color_get_bg(GtkWidget *self);
 char* color_to_hex(struct Color *color, char*space);
 char* color_to_rgb(struct Color *color, char*space);
 char *color_to_hsv(struct Color *color, char*space);

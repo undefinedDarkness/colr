@@ -11,7 +11,7 @@ button {
 	all: unset;
 }
 
-.color-display box {
+.color-display button {
 	all: unset;
 	min-height: 48px;
 }
@@ -20,11 +20,11 @@ button {
 	margin: 8px;
 }
 
-.color-display box:first-child  {
+.color-display button:first-child  {
 	border-radius: 5px 0 0 5px;
 }
 
-.color-display box:last-child  {
+.color-display button:last-child  {
 	border-radius: 0 5px 5px 0;
 }
 

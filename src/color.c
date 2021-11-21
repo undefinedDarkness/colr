@@ -18,6 +18,7 @@ char *color_to_rgb(struct Color *color,char*space) {
 char *color_to_hsv(struct Color *color, char*space) {
 	double h, s, v;
 	gtk_rgb_to_hsv(color->r/255., color->g/255., color->b/255., &h, &s, &v);
+	// TODO: Dont be stupid here :(
 	sprintf(space, "hsv(%.0f,%.0f%%,%.0f%%)", (h * 255) > 0 ? (h * 255) + 10 : 0, s * 100, v * 100);
 	return space;
 }
@@ -32,16 +33,38 @@ void color_set_bg(struct Color *color_data, GtkWidget *widget) {
 	free(hex);
 }
 
+struct Color color_get_bg(GtkWidget *self) {
+	GdkRGBA color;
+	gtk_style_context_get_background_color(gtk_widget_get_style_context(self), GTK_STATE_FLAG_NORMAL, &color);
+	/* g_print("rgb(%f,%f,%f)", color.red, color.green, color.blue); */
+	struct Color color_data = {
+		.r = color.red * 255,
+		.b = color.blue * 255,
+		.g = color.green * 255
+	};
+	return color_data;
+}
+
+static int color_conform(int c) {
+	if (c > 255) {
+		return 255;
+	} else if (c < 0) {
+		return 0;
+	} else {
+		return c;
+	}
+}
+
 struct Color color_apply(struct Color *c, int amount) {
 	struct Color out = {
-		.r = c->r + amount,
-		.g = c->g + amount,
-		.b = c->b + amount
+		.r = color_conform(c->r + amount),
+		.g = color_conform(c->g + amount),
+		.b = color_conform(c->b + amount)
 	};
 	return out;
 }
 
-struct Color pick_color () {
+struct Color color_pick () {
 	Display *display = XOpenDisplay(NULL);
 	Window root = DefaultRootWindow(display);
 
