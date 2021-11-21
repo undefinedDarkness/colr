@@ -1,10 +1,14 @@
-button:not(:first-child) {
-	all: unset;
+.sidebar button {
 	margin: 8px;
 	border-radius: 5px;
 	min-width: 32px;
 	color: transparent;
 	min-height: 32px;
+	box-shadow: 1px 1px 2px 0px #f0f0f0;
+}
+
+button {
+	all: unset;
 }
 
 .color-display box {
@@ -24,14 +28,10 @@ button:not(:first-child) {
 	border-radius: 0 5px 5px 0;
 }
 
-.color-button {
-	box-shadow: 1px 1px 2px 0px #f0f0f0;
-}
-
 .color-row {
 	margin: 8px 8px 0 8px;
 	background: #fafafa;
 	padding: 13px;
 	border-radius: 5px;
 }
-.color-label { font-family: monospace; }
+.color-row label:first-child { font-family: monospace; }
