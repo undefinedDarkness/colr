@@ -24,7 +24,7 @@ char *color_to_hsv(struct Color *color, char*space) {
 
 // Apply a color to a widget's background
 void color_set_bg(struct Color *color_data, GtkWidget *widget) {
-	char* hex =malloc(7);
+	char* hex = malloc(8);
 	color_to_hex(color_data, hex);
 	GdkRGBA color;
 	gdk_rgba_parse(&color, hex); // TODO: Dont use this :(
