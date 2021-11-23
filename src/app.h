@@ -25,12 +25,15 @@ struct CallbackData {
 // User Interface:
 GtkWidget *create_color_row(const char *label, GtkWidget *panel);
 void add_new_color(struct CallbackData *data);
-void attach_menu(GtkWidget *self, GdkEvent *event, GtkWidget *sidebar);
+GtkWidget *create_menu(struct CallbackData *ui);
 
 // Tiny:
 void load_css();
 void paste_to_clipboard(UNUSED GtkWidget* parent, GtkWidget *source);
 void free_2nd(UNUSED GtkWidget *widget, struct CallbackData *data);
 void save_to_disk(GtkWidget*self, GtkWidget *widget);
+void attach_menu(GtkWidget *self, GdkEvent *event, GtkWidget *sidebar);
+void on_hover_pointer(GtkWidget *widget);
 
 #endif
+

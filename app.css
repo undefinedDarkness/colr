@@ -1,37 +1,42 @@
-.sidebar button {
-	margin: 8px;
-	border-radius: 5px;
-	min-width: 32px;
-	color: transparent;
-	min-height: 32px;
-	box-shadow: 1px 1px 2px 0px #f0f0f0;
+.sidebar button, .color-display button, .color-row button {
+	border: 0;
+	background: none;
+	box-shadow: none;
 }
 
-button {
-	all: unset;
-}
-
-.color-display button {
-	all: unset;
-	min-height: 48px;
-}
-
-.color-display {
-	margin: 8px;
-}
-
-.color-display button:first-child  {
-	border-radius: 5px 0 0 5px;
-}
-
-.color-display button:last-child  {
-	border-radius: 0 5px 5px 0;
+.sidebar button, .color-display {
+	box-shadow: 0 0 2.5px 1px #d0d0d0;
 }
 
 .color-row {
-	margin: 8px 8px 0 8px;
-	background: #fafafa;
-	padding: 13px;
-	border-radius: 5px;
+	border: 1px solid #ccc;
+	margin-bottom: 10px;
+	border-radius: 3px;
+	padding: 4px 4px 4px 10px;
+	background: rgb(250, 250, 250);
 }
-.color-row label:first-child { font-family: monospace; }
+
+.color-row label:first-child {
+	font-family: monospace;
+}
+
+.color-display button:first-child { border-radius: 3px 0 0 3px; }
+.color-display button:last-child { border-radius: 0 3px 3px 0; }
+
+.color-display button {
+	border-radius: 0;
+	min-height: 40px;
+}
+
+.color-display {
+	margin-bottom: 16px;
+}
+
+.color-preview {
+	margin: 16px;
+}
+
+.sidebar button {
+	margin: 8px;
+}
+

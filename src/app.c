@@ -35,22 +35,26 @@ int main(int argc, char ** argv) {
 	GtkWidget *layout = BOX;
 	gtk_container_add(GTK_CONTAINER(window), layout);
 
+		// Create new sidebar
 		GtkWidget *sidebar = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 		gtk_style_context_add_class(gtk_widget_get_style_context(sidebar), "sidebar");
 
 		GtkWidget *sidebar_container = gtk_scrolled_window_new(NULL, NULL);
 		gtk_widget_add_events(sidebar_container, GDK_BUTTON_PRESS_MASK);
-		g_signal_connect(G_OBJECT(sidebar_container), "button-press-event", G_CALLBACK(attach_menu), sidebar);
 		gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sidebar_container), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 		gtk_container_add(GTK_CONTAINER(sidebar_container), sidebar);
 		gtk_box_pack_start(GTK_BOX(layout), sidebar_container, 0, 0 , 0);
-
+	
+			// Color picker button
 			GtkWidget *picker = gtk_button_new_from_icon_name("color-picker", GTK_ICON_SIZE_BUTTON);
 			gtk_container_add(GTK_CONTAINER(sidebar), picker);
-	
+
+	// Main preview panel
 	GtkWidget *panel = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+	gtk_style_context_add_class(gtk_widget_get_style_context(panel), "color-preview");
 	gtk_box_pack_end(GTK_BOX(layout), panel, TRUE, TRUE, 0);
 
+		// Create color display row
 		GtkWidget *color_row = BOX;
 		gtk_box_set_homogeneous(GTK_BOX(color_row), TRUE);
 		gtk_container_add(GTK_CONTAINER(panel), color_row);
@@ -58,12 +62,15 @@ int main(int argc, char ** argv) {
 		
 			GtkWidget *color_light = gtk_button_new();
 			gtk_container_add(GTK_CONTAINER(color_row), color_light);
+			/* on_hover_pointer(color_light); */
 
 			GtkWidget *color = gtk_button_new();
 			gtk_container_add(GTK_CONTAINER(color_row), color);
+			/* on_hover_pointer(color); */
 
 			GtkWidget *color_dark = gtk_button_new();
 			gtk_container_add(GTK_CONTAINER(color_row), color_dark);
+			/* on_hover_pointer(color_dark); */
 		
 	// Assemble data to pass.
 	struct CallbackData ui = {
@@ -76,8 +83,11 @@ int main(int argc, char ** argv) {
 		.sidebar = sidebar,
 	};
 
+	g_signal_connect(G_OBJECT(sidebar_container), "button-press-event", G_CALLBACK(attach_menu), create_menu(&ui));
+	
+	/* g_signal_connect(G_OBJECT(color),       "clicked", G_CALLBACK(color_edit_menu), &ui); */
 	g_signal_connect(G_OBJECT(color_light), "clicked", G_CALLBACK(add_new_color_from_widget), &ui);
-	g_signal_connect(G_OBJECT(color_dark), "clicked", G_CALLBACK(add_new_color_from_widget), &ui);
+	g_signal_connect(G_OBJECT(color_dark),  "clicked", G_CALLBACK(add_new_color_from_widget), &ui);
 	
 	g_signal_connect(G_OBJECT(picker), "clicked", G_CALLBACK(add_new_color_from_pick), &ui);
 	g_signal_connect(G_OBJECT(window), "destroy", gtk_main_quit, NULL);

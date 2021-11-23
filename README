@@ -18,11 +18,17 @@ Requirements:
 Gtk 3 Development Headers (libgtk-3-dev)
 X11 Development Headers   (libx11-dev)
 
+Using external screenshot program:
+$ make build-no-x11 exe=<PROGRAM THAT OUTPUTS HEXCODE>
+
 TODO
 ----
 - Save picked colors to a file  DONE
-- Deal with duplicate colors 
+- Deal with duplicate colors    DONE
 - Edit colors
+- Change mouse colors on btns  
+- Allow external color picker   DONE
+- Show current color while picking
 - Placeholder Image
 - Refactor some single callbacks
 - Move some functions around

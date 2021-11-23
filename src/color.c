@@ -1,5 +1,7 @@
+#ifndef SCREENSHOT_PROGRAM
 #include <X11/cursorfont.h>
 #include <X11/Xutil.h>
+#endif
 #include <stdio.h>
 #include <gtk/gtk.h>
 #include <stdlib.h>
@@ -13,6 +15,10 @@ char *color_to_hex(struct Color *color, char*space) {
 char *color_to_rgb(struct Color *color,char*space) {
 	sprintf(space, "rgb(%d,%d,%d)", color->r, color->g, color->b);
 	return space;
+}
+
+void color_edit_menu(GtkWidget *self) {
+
 }
 
 char *color_to_hsv(struct Color *color, char*space) {
@@ -45,6 +51,7 @@ struct Color color_get_bg(GtkWidget *self) {
 	return color_data;
 }
 
+// Conform color to rgb limits
 static int color_conform(int c) {
 	if (c > 255) {
 		return 255;
@@ -55,6 +62,7 @@ static int color_conform(int c) {
 	}
 }
 
+// Apply modification to all colors
 struct Color color_apply(struct Color *c, int amount) {
 	struct Color out = {
 		.r = color_conform(c->r + amount),
@@ -64,6 +72,7 @@ struct Color color_apply(struct Color *c, int amount) {
 	return out;
 }
 
+#ifndef SCREENSHOT_PROGRAM
 struct Color color_pick () {
 	Display *display = XOpenDisplay(NULL);
 	Window root = DefaultRootWindow(display);
@@ -104,3 +113,22 @@ struct Color color_pick () {
 	XCloseDisplay(display);
 	return color;
 }
+#else
+struct Color color_pick () {
+	FILE *process = popen(SCREENSHOT_PROGRAM, "r");
+	if (process == NULL) {
+		fprintf(stderr, "Failed to run command: %s - Are you using any shell script?", SCREENSHOT_PROGRAM);
+		exit(1);
+	}
+
+	int r, g, b;
+	fscanf(process, "#%02x%02x%02x", &r, &g, &b);
+	pclose(process);
+	struct Color c = {
+		.r = r,
+		.g = g,
+		.b = b
+	};
+	return c;
+}
+#endif
