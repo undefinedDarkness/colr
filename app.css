@@ -32,6 +32,11 @@
 	margin-bottom: 16px;
 }
 
+.color-editor-preview {
+	min-height: 100px;
+	min-width: 200px;
+}
+
 .color-preview {
 	margin: 16px;
 }
@@ -40,3 +45,18 @@
 	margin: 8px;
 }
 
+scale trough highlight {
+	background-color: transparent;
+}
+
+scale slider {
+	padding: 3px;
+}
+
+.dialog-action-box {
+	margin-top: 20px;
+}
+
+.dialog-vbox {
+	margin: 20px;
+}

@@ -17,10 +17,6 @@ char *color_to_rgb(struct Color *color,char*space) {
 	return space;
 }
 
-void color_edit_menu(GtkWidget *self) {
-
-}
-
 char *color_to_hsv(struct Color *color, char*space) {
 	double h, s, v;
 	gtk_rgb_to_hsv(color->r/255., color->g/255., color->b/255., &h, &s, &v);
@@ -70,6 +66,22 @@ struct Color color_apply(struct Color *c, int amount) {
 		.b = color_conform(c->b + amount)
 	};
 	return out;
+}
+
+char *create_color_range_gradient(struct Color c, enum ColorChannel channel,char*buffer) {
+	/* char *buffer = malloc(80); */
+	switch(channel) {
+		case COLOR_CHANNEL_RED:
+			sprintf(buffer, "trough{background-image:linear-gradient(to right,#00%02x%02x,#ff%02x%02x);}", c.g, c.b, c.g, c.b);
+			break;
+		case COLOR_CHANNEL_BLUE:
+			sprintf(buffer, "trough{background-image:linear-gradient(to right,#%02x%02x00,#%02x%02xff);}", c.r, c.g, c.r, c.g);
+			break;
+		case COLOR_CHANNEL_GREEN:
+			sprintf(buffer, "trough{background-image:linear-gradient(to right,#%02x00%02x,#%02xff%02x);}", c.r, c.b, c.r, c.b);
+			break;
+	}
+	return buffer;
 }
 
 #ifndef SCREENSHOT_PROGRAM

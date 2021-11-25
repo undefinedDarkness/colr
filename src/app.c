@@ -85,7 +85,7 @@ int main(int argc, char ** argv) {
 
 	g_signal_connect(G_OBJECT(sidebar_container), "button-press-event", G_CALLBACK(attach_menu), create_menu(&ui));
 	
-	/* g_signal_connect(G_OBJECT(color),       "clicked", G_CALLBACK(color_edit_menu), &ui); */
+	g_signal_connect(G_OBJECT(color),       "clicked", G_CALLBACK(color_edit_menu), &ui);
 	g_signal_connect(G_OBJECT(color_light), "clicked", G_CALLBACK(add_new_color_from_widget), &ui);
 	g_signal_connect(G_OBJECT(color_dark),  "clicked", G_CALLBACK(add_new_color_from_widget), &ui);
 	

@@ -26,10 +26,10 @@ TODO
 ----
 - Save picked colors to a file  DONE
 - Deal with duplicate colors    DONE
-- Edit colors
+- Edit colors                   WIP
+- Support Alpha
+- Remove colors                 DONE
 - Change mouse colors on btns  
 - Allow external color picker   DONE
 - Show current color while picking
 - Placeholder Image
-- Refactor some single callbacks
-- Move some functions around

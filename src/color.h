@@ -4,10 +4,12 @@ struct Color {
 	int b;
 };
 
+enum ColorChannel { COLOR_CHANNEL_RED, COLOR_CHANNEL_GREEN, COLOR_CHANNEL_BLUE };
+
 // Misc
 struct Color color_pick ();
 struct Color color_apply (struct Color *c, int amount);
-void color_edit_menu (GtkWidget *self);
+char *create_color_range_gradient(struct Color c, enum ColorChannel, char*buffer);
 
 // Color Conversion Functions
 char* color_to_hex(struct Color *color, char*space);

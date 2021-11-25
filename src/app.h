@@ -19,21 +19,31 @@ struct CallbackData {
 	GtkWidget *rgb;
 	GtkWidget *hex;
 	GtkWidget *hsv;
+
+	GtkWidget *scale_r;
+	GtkWidget *scale_b;
+	GtkWidget *scale_g;
+
 	struct Color color_data;
 };
 
 // User Interface:
 GtkWidget *create_color_row(const char *label, GtkWidget *panel);
 void add_new_color(struct CallbackData *data);
+void color_edit_menu (GtkWidget *self, struct CallbackData *ui);
+void show_color(UNUSED GtkWidget *widget, struct CallbackData *data);
 GtkWidget *create_menu(struct CallbackData *ui);
+void apply_style (GtkWidget *w, char*style);
 
-// Tiny:
+// Behaviour:
 void load_css();
 void paste_to_clipboard(UNUSED GtkWidget* parent, GtkWidget *source);
+void remove_current_color(UNUSED GtkWidget*self, struct CallbackData *data);
 void free_2nd(UNUSED GtkWidget *widget, struct CallbackData *data);
 void save_to_disk(GtkWidget*self, GtkWidget *widget);
 void attach_menu(GtkWidget *self, GdkEvent *event, GtkWidget *sidebar);
 void on_hover_pointer(GtkWidget *widget);
+GtkWidget* wrap_left_label(GtkWidget *w, const char *label);
 
 #endif
 

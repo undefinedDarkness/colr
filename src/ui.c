@@ -1,6 +1,12 @@
 #include "app.h"
 
-static void show_color(UNUSED GtkWidget *widget, struct CallbackData *data) {
+void apply_style (GtkWidget *w, char*style) {
+	GtkCssProvider *css = gtk_css_provider_new();
+	gtk_css_provider_load_from_data(css, style, strlen(style), NULL);
+	gtk_style_context_add_provider(gtk_widget_get_style_context(w) ,GTK_STYLE_PROVIDER(css), 600);
+}
+
+void show_color(UNUSED GtkWidget *widget, struct CallbackData *data) {
 	struct Color color_light = color_apply(&data->color_data, 25);
 	struct Color color_dark = color_apply(&data->color_data, -25);
 	color_set_bg(&data->color_data, data->color);
@@ -29,7 +35,7 @@ void add_new_color(struct CallbackData *data) {
 			struct Color c = color_get_bg(children->data);
 			if (c.r == data->color_data.r && c.g == data->color_data.g && c.b == data->color_data.b) {
 				gtk_button_clicked(children->data);
-				return;
+				goto end;
 			}
 			children = children->next;
 	}	
@@ -40,11 +46,17 @@ void add_new_color(struct CallbackData *data) {
 
 	// Create a copy of the struct 
 	struct CallbackData *copy = malloc(sizeof (struct CallbackData));
-	memcpy(copy, data, sizeof (struct CallbackData));	
+	memcpy(copy, data, sizeof (struct CallbackData));
 	g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(show_color), copy); 
 	g_signal_connect(G_OBJECT(button), "destroy", G_CALLBACK(free_2nd), copy);
 	gtk_widget_show_all(button);
+	
+	// Switch to the new color
+	show_color(NULL, copy);
 	gtk_container_add(GTK_CONTAINER(data->sidebar), button);
+
+	end:
+	g_list_free(children);
 }
 
 
@@ -65,13 +77,19 @@ GtkWidget *create_color_row(const char *label, GtkWidget *panel) {
 	return show;
 }
 
+// Create right click menu
+// Callback data has no color
 GtkWidget *create_menu(struct CallbackData *ui) {
-	// Create right click menu
 	GtkWidget *right_click_menu = gtk_menu_new();
 	GtkWidget *item_1 = gtk_menu_item_new_with_label("Save Palette");
 	GtkWidget *item_2 = gtk_menu_item_new_with_label("Copy to Clipboard");
+	GtkWidget *item_3 = gtk_menu_item_new_with_label("Remove Color");
+	
 	gtk_container_add(GTK_CONTAINER(right_click_menu), item_1);
 	gtk_container_add(GTK_CONTAINER(right_click_menu), item_2);
+	gtk_container_add(GTK_CONTAINER(right_click_menu), item_3);
+	
+	g_signal_connect(G_OBJECT(item_3), "activate", G_CALLBACK(remove_current_color), ui);
 	g_signal_connect(G_OBJECT(item_1), "activate", G_CALLBACK(save_to_disk), ui->sidebar);
 	g_signal_connect(G_OBJECT(item_2), "activate", G_CALLBACK(paste_to_clipboard), ui->hex); // TODO: Select the one under the mouse, not the selected one
 	gtk_widget_show_all(right_click_menu);
