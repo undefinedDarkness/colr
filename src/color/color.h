@@ -17,5 +17,5 @@ char* color_to_rgb(struct Color *color, char*space);
 char *color_to_hsv(struct Color *color, char*space);
 
 // Get & Set Widget Background
-void color_set_bg(struct Color *color_data, GtkWidget *widget);
+void color_set_bg(struct Color *color_data, GtkWidget *widget, char* space);
 struct Color color_get_bg(GtkWidget *self);

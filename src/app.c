@@ -62,25 +62,24 @@ int main(int argc, char ** argv) {
 		
 			GtkWidget *color_light = gtk_button_new();
 			gtk_container_add(GTK_CONTAINER(color_row), color_light);
-			/* on_hover_pointer(color_light); */
 
 			GtkWidget *color = gtk_button_new();
 			gtk_container_add(GTK_CONTAINER(color_row), color);
-			/* on_hover_pointer(color); */
 
 			GtkWidget *color_dark = gtk_button_new();
 			gtk_container_add(GTK_CONTAINER(color_row), color_dark);
-			/* on_hover_pointer(color_dark); */
 		
 	// Assemble data to pass.
+	// TODO: Dont create variables, just use the struct.
 	struct CallbackData ui = {
 		.color_light = color_light,
 		.color = color,
+		.color_dark = color_dark,
 		.rgb = create_color_row("RGB", panel),
 		.hex = create_color_row("HEX", panel),
 		.hsv = create_color_row("HSV", panel),
-		.color_dark = color_dark,
 		.sidebar = sidebar,
+		.panel = panel,
 	};
 
 	g_signal_connect(G_OBJECT(sidebar_container), "button-press-event", G_CALLBACK(attach_menu), create_menu(&ui));
@@ -94,5 +93,6 @@ int main(int argc, char ** argv) {
 
 	load_css();
 	gtk_widget_show_all(window);
+	gtk_widget_hide(panel);
 	gtk_main();
 }

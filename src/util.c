@@ -11,11 +11,8 @@ void free_2nd(UNUSED GtkWidget *widget, struct CallbackData *data) {
 	free(data);
 }
 
-GtkWidget* wrap_left_label(GtkWidget *w, const char *label) {
-	GtkWidget *container = BOX;
-	gtk_container_add(GTK_CONTAINER(container), gtk_label_new(label));
-	gtk_container_add(GTK_CONTAINER(container), w);
-	return container;
+void hide_2nd(UNUSED GtkWidget *self, GtkWidget *to_show) {
+	gtk_widget_hide(to_show);
 }
 
 // See: https://www.cc.gatech.edu/data_files/public/doc/gtk/tutorial/gtk_tut-14.html

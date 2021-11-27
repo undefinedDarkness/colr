@@ -1,4 +1,4 @@
-#include "app.h"
+#include "../app.h"
 
 void apply_style (GtkWidget *w, char*style) {
 	GtkCssProvider *css = gtk_css_provider_new();
@@ -9,21 +9,23 @@ void apply_style (GtkWidget *w, char*style) {
 void show_color(UNUSED GtkWidget *widget, struct CallbackData *data) {
 	struct Color color_light = color_apply(&data->color_data, 25);
 	struct Color color_dark = color_apply(&data->color_data, -25);
-	color_set_bg(&data->color_data, data->color);
-	color_set_bg(&color_light, data->color_light);
-	color_set_bg(&color_dark, data->color_dark);
-
 	char *color_text = malloc(20);
+	color_set_bg(&data->color_data, data->color, color_text);
+	gtk_label_set_text(GTK_LABEL(data->hex), color_text);
+	
+	color_set_bg(&color_light, data->color_light, color_text);
+	color_set_bg(&color_dark, data->color_dark, color_text);
+
 	
 	color_to_rgb(&data->color_data, color_text);
 	gtk_label_set_text(GTK_LABEL(data->rgb), color_text);
 	
-	color_to_hex(&data->color_data, color_text);
-	gtk_label_set_text(GTK_LABEL(data->hex), color_text);
+	/* color_to_hex(&data->color_data, color_text); */
 	
 	color_to_hsv(&data->color_data, color_text);
 	gtk_label_set_text(GTK_LABEL(data->hsv), color_text);
 
+	gtk_widget_show_all(data->panel);
 	free(color_text);
 }
 
@@ -42,7 +44,9 @@ void add_new_color(struct CallbackData *data) {
 
 	GtkWidget *button = gtk_button_new();
 
-	color_set_bg(&data->color_data, button);
+	char *space = malloc(8);
+	color_set_bg(&data->color_data, button, space);
+	free(space);
 
 	// Create a copy of the struct 
 	struct CallbackData *copy = malloc(sizeof (struct CallbackData));

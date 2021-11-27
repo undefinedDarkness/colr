@@ -1,8 +1,7 @@
-#include "app.h"
+#include "../app.h"
 
 static GtkWidget *label_scale(GtkWidget *scale, const char* label) {
 	GtkWidget * container = BOX;
-	/* gtk_box_set_homogeneous(GTK_BOX(container), 0); */
 	GtkWidget *lw = gtk_label_new(label);
 	gtk_label_set_yalign(GTK_LABEL(lw), 0.7);
 	gtk_container_add(GTK_CONTAINER(container), lw);
@@ -11,7 +10,9 @@ static GtkWidget *label_scale(GtkWidget *scale, const char* label) {
 }
 
 static void update_r(GtkWidget *self, struct CallbackData *ui) {
+	ui->color_data.r = gtk_range_get_value(GTK_RANGE(self));
 	char *gradient = malloc(100); 
+
 	// This will get recreated and dumped many times...
 	// Figure out a better way
 	create_color_range_gradient(ui->color_data, COLOR_CHANNEL_GREEN, gradient);
@@ -19,7 +20,6 @@ static void update_r(GtkWidget *self, struct CallbackData *ui) {
 	create_color_range_gradient(ui->color_data, COLOR_CHANNEL_BLUE, gradient);
 	apply_style(ui->scale_b, gradient);
 
-	ui->color_data.r = gtk_range_get_value(GTK_RANGE(self));
 	free(gradient);
 	show_color(NULL, ui);
 	/* update_editor(ui); */
@@ -27,19 +27,20 @@ static void update_r(GtkWidget *self, struct CallbackData *ui) {
 
 static void update_g(GtkWidget *self, struct CallbackData *ui) {
 
+	ui->color_data.g = gtk_range_get_value(GTK_RANGE(self));
 	char *gradient = malloc(100);
 	create_color_range_gradient(ui->color_data, COLOR_CHANNEL_RED, gradient);
 	apply_style(ui->scale_r, gradient);
 	create_color_range_gradient(ui->color_data, COLOR_CHANNEL_BLUE, gradient);
 	apply_style(ui->scale_b, gradient);
 
-	ui->color_data.g = gtk_range_get_value(GTK_RANGE(self));
 	free(gradient);
 	show_color(NULL, ui);
 	/* update_editor(ui); */
 };
 
 static void update_b(GtkWidget *self, struct CallbackData *ui) {
+	ui->color_data.b = gtk_range_get_value(GTK_RANGE(self));
 	char *gradient = malloc(100);	
 	create_color_range_gradient(ui->color_data, COLOR_CHANNEL_RED, gradient);
 	apply_style(ui->scale_r, gradient);
@@ -47,10 +48,14 @@ static void update_b(GtkWidget *self, struct CallbackData *ui) {
 	apply_style(ui->scale_g, gradient);
 
 	free(gradient);
-	ui->color_data.b = gtk_range_get_value(GTK_RANGE(self));
 	show_color(NULL, ui);
 	/* update_editor(ui); */
 };
+
+void editor_on_selection(GtkWidget *self, UNUSED int resp, struct CallbackData *ui) {
+	add_new_color(ui);
+	gtk_widget_destroy(self);
+}
 
 void color_edit_menu(GtkWidget *self, struct CallbackData *ui) {
 	ui->color_data = color_get_bg(ui->color); // Get starting color
@@ -76,7 +81,7 @@ void color_edit_menu(GtkWidget *self, struct CallbackData *ui) {
 	g_signal_connect(G_OBJECT(ui->scale_r), "value-changed", G_CALLBACK(update_r), ui);
 	g_signal_connect(G_OBJECT(ui->scale_g), "value-changed", G_CALLBACK(update_g), ui);
 	g_signal_connect(G_OBJECT(ui->scale_b), "value-changed", G_CALLBACK(update_b), ui);
-	g_signal_connect(G_OBJECT(dialog), "response", G_CALLBACK(gtk_widget_destroy), dialog);
+	g_signal_connect(G_OBJECT(dialog),      "response",      G_CALLBACK(editor_on_selection), ui);
 
 	gtk_container_add(GTK_CONTAINER(content), label_scale(ui->scale_r, "Red"));
 	gtk_container_add(GTK_CONTAINER(content), label_scale(ui->scale_g, "Green"));

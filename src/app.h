@@ -5,12 +5,15 @@
 #define UNUSED __attribute__((unused))	
 #define BOX gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0)
 #include <gtk/gtk.h>
-#include "color.h"
+#include "color/color.h"
 #include <stdlib.h>
 
 // Stores a bunch of widgets that callbacks need to use, and a color
+// ;-;
+// This is really ugly but I cant be fucked to fix it
 struct CallbackData {
 	GtkWidget *sidebar;
+	GtkWidget *panel;
 
 	GtkWidget *color;
 	GtkWidget *color_light;
@@ -40,10 +43,9 @@ void load_css();
 void paste_to_clipboard(UNUSED GtkWidget* parent, GtkWidget *source);
 void remove_current_color(UNUSED GtkWidget*self, struct CallbackData *data);
 void free_2nd(UNUSED GtkWidget *widget, struct CallbackData *data);
+void hide_2nd(UNUSED GtkWidget *widget, GtkWidget *to_show);
 void save_to_disk(GtkWidget*self, GtkWidget *widget);
 void attach_menu(GtkWidget *self, GdkEvent *event, GtkWidget *sidebar);
-void on_hover_pointer(GtkWidget *widget);
-GtkWidget* wrap_left_label(GtkWidget *w, const char *label);
 
 #endif
 

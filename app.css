@@ -39,6 +39,7 @@
 
 .color-preview {
 	margin: 16px;
+	background: #f6f5f4;
 }
 
 .sidebar button {
@@ -59,4 +60,10 @@ scale slider {
 
 .dialog-vbox {
 	margin: 20px;
+}
+
+window > box {
+	background-image: url("placeholder.png");
+	background-repeat: no-repeat;
+	background-position: center;
 }

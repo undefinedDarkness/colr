@@ -26,13 +26,13 @@ char *color_to_hsv(struct Color *color, char*space) {
 }
 
 // Apply a color to a widget's background
-void color_set_bg(struct Color *color_data, GtkWidget *widget) {
-	char* hex = malloc(8);
-	color_to_hex(color_data, hex);
+void color_set_bg(struct Color *color_data, GtkWidget *widget, char* space) {
+	/* char* hex = malloc(8); */
+	color_to_hex(color_data, space);
 	GdkRGBA color;
-	gdk_rgba_parse(&color, hex); // TODO: Dont use this :(
+	gdk_rgba_parse(&color, space); // TODO: Dont use this :(
 	gtk_widget_override_background_color(widget, GTK_STATE_NORMAL, &color);
-	free(hex);
+	/* free(hex); */
 }
 
 struct Color color_get_bg(GtkWidget *self) {
