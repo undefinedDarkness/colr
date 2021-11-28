@@ -7,6 +7,12 @@
 #include <stdlib.h>
 #include "color.h"
 
+struct Color color_from_hex(char *hex)  {
+	struct Color re;
+	sscanf(hex, "#%02x%02x%02x", &re.r, &re.g, &re.b);
+	return re;
+}
+
 char *color_to_hex(struct Color *color, char*space) {
 	sprintf(space, "#%02x%02x%02x", color->r, color->g, color->b);
 	return space;

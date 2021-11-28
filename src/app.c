@@ -10,6 +10,26 @@ void add_new_color_from_widget(GtkWidget *self, struct CallbackData *ui) {
 	add_new_color(ui);
 }
 
+void on_file_drop(
+		UNUSED GtkWidget *self, 
+		UNUSED GdkDragContext *ctx,
+		UNUSED int x, UNUSED int y,
+		GtkSelectionData *sel,
+		UNUSED int info,
+		UNUSED int time,
+		struct CallbackData *ui) {
+	char* type = gdk_atom_name(gtk_selection_data_get_data_type(sel));
+	
+	if (strcmp(type, "text/uri-list") == 0) {
+		char **uris = gtk_selection_data_get_uris(sel);
+		const char* path = g_uri_get_path(g_uri_parse(uris[0], 0, NULL));
+		parse_colors_from_file(path, ui);
+		free(uris);
+	}
+
+	g_free(type);
+}
+
 int main(int argc, char ** argv) {
 	gtk_init(&argc, &argv);
 
@@ -82,6 +102,7 @@ int main(int argc, char ** argv) {
 		.panel = panel,
 	};
 
+	// Connect signals
 	g_signal_connect(G_OBJECT(sidebar_container), "button-press-event", G_CALLBACK(attach_menu), create_menu(&ui));
 	
 	g_signal_connect(G_OBJECT(color),       "clicked", G_CALLBACK(color_edit_menu), &ui);
@@ -90,6 +111,14 @@ int main(int argc, char ** argv) {
 	
 	g_signal_connect(G_OBJECT(picker), "clicked", G_CALLBACK(add_new_color_from_pick), &ui);
 	g_signal_connect(G_OBJECT(window), "destroy", gtk_main_quit, NULL);
+
+	// Setup drag & drop
+	GtkTargetEntry targets[] = {
+		{ "text/plain", 0, FT_PLAINTEXT },
+		{ "text/uri-list", 0, FT_URILIST }
+	};
+	gtk_drag_dest_set(sidebar, GTK_DEST_DEFAULT_ALL, targets, G_N_ELEMENTS(targets), GDK_ACTION_COPY);
+	g_signal_connect(G_OBJECT(sidebar), "drag-data-received", G_CALLBACK(on_file_drop), &ui);
 
 	load_css();
 	gtk_widget_show_all(window);

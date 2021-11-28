@@ -11,16 +11,14 @@ static GtkWidget *label_scale(GtkWidget *scale, const char* label) {
 
 static void update_r(GtkWidget *self, struct CallbackData *ui) {
 	ui->color_data.r = gtk_range_get_value(GTK_RANGE(self));
-	char *gradient = malloc(100); 
 
 	// This will get recreated and dumped many times...
 	// Figure out a better way
-	create_color_range_gradient(ui->color_data, COLOR_CHANNEL_GREEN, gradient);
-	apply_style(ui->scale_g, gradient);
-	create_color_range_gradient(ui->color_data, COLOR_CHANNEL_BLUE, gradient);
-	apply_style(ui->scale_b, gradient);
+	create_color_range_gradient(ui->color_data, COLOR_CHANNEL_GREEN, ui->buffer);
+	apply_style(ui->scale_g, ui->buffer);
+	create_color_range_gradient(ui->color_data, COLOR_CHANNEL_BLUE, ui->buffer);
+	apply_style(ui->scale_b, ui->buffer);
 
-	free(gradient);
 	show_color(NULL, ui);
 	/* update_editor(ui); */
 };
@@ -28,37 +26,35 @@ static void update_r(GtkWidget *self, struct CallbackData *ui) {
 static void update_g(GtkWidget *self, struct CallbackData *ui) {
 
 	ui->color_data.g = gtk_range_get_value(GTK_RANGE(self));
-	char *gradient = malloc(100);
-	create_color_range_gradient(ui->color_data, COLOR_CHANNEL_RED, gradient);
-	apply_style(ui->scale_r, gradient);
-	create_color_range_gradient(ui->color_data, COLOR_CHANNEL_BLUE, gradient);
-	apply_style(ui->scale_b, gradient);
+	create_color_range_gradient(ui->color_data, COLOR_CHANNEL_RED, ui->buffer);
+	apply_style(ui->scale_r, ui->buffer);
+	create_color_range_gradient(ui->color_data, COLOR_CHANNEL_BLUE, ui->buffer);
+	apply_style(ui->scale_b, ui->buffer);
 
-	free(gradient);
 	show_color(NULL, ui);
 	/* update_editor(ui); */
 };
 
 static void update_b(GtkWidget *self, struct CallbackData *ui) {
 	ui->color_data.b = gtk_range_get_value(GTK_RANGE(self));
-	char *gradient = malloc(100);	
-	create_color_range_gradient(ui->color_data, COLOR_CHANNEL_RED, gradient);
-	apply_style(ui->scale_r, gradient);
-	create_color_range_gradient(ui->color_data, COLOR_CHANNEL_GREEN, gradient);
-	apply_style(ui->scale_g, gradient);
+	create_color_range_gradient(ui->color_data, COLOR_CHANNEL_RED, ui->buffer);
+	apply_style(ui->scale_r, ui->buffer);
+	create_color_range_gradient(ui->color_data, COLOR_CHANNEL_GREEN, ui->buffer);
+	apply_style(ui->scale_g, ui->buffer);
 
-	free(gradient);
 	show_color(NULL, ui);
 	/* update_editor(ui); */
 };
 
 void editor_on_selection(GtkWidget *self, UNUSED int resp, struct CallbackData *ui) {
 	add_new_color(ui);
+	free(ui->buffer); // dont need you anymore
 	gtk_widget_destroy(self);
 }
 
 void color_edit_menu(GtkWidget *self, struct CallbackData *ui) {
 	ui->color_data = color_get_bg(ui->color); // Get starting color
+	ui->buffer = malloc(100); // This is super ugly yes but it saves a lottt of allocations
 	GtkWidget *dialog = gtk_dialog_new_with_buttons(
 			"Edit Color", 
 			NULL, 

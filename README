@@ -24,11 +24,15 @@ $ make build-no-x11 exe=<PROGRAM THAT OUTPUTS HEXCODE>
 
 TODO
 ----
-- Save picked colors to a file  DONE
-- Deal with duplicate colors    DONE
-- Edit colors                   DONE
 - Support Alpha
+- Package resources correctly
+- Show current color while picking
+- Be better at pulling colors from your theme
+- Pull most common color from image in DnD
+- Drag and drop support         DONE
+- Edit colors                   DONE
+- Deal with duplicate colors    DONE
+- Save picked colors to a file  DONE
 - Remove colors                 DONE
 - Allow external color picker   DONE
-- Show current color while picking
 - Placeholder Image             DONE

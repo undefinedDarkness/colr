@@ -11,10 +11,6 @@ void free_2nd(UNUSED GtkWidget *widget, struct CallbackData *data) {
 	free(data);
 }
 
-void hide_2nd(UNUSED GtkWidget *self, GtkWidget *to_show) {
-	gtk_widget_hide(to_show);
-}
-
 // See: https://www.cc.gatech.edu/data_files/public/doc/gtk/tutorial/gtk_tut-14.html
 void attach_menu(GtkWidget* self, GdkEvent *event, GtkWidget *menu) {
 	if (event->type == GDK_BUTTON_PRESS) {
@@ -85,4 +81,18 @@ void save_to_disk(UNUSED GtkWidget*self, GtkWidget*sidebar) {
 		fclose(file);
 	}
 	gtk_widget_destroy(chooser);
+}
+
+void parse_colors_from_file(const char* path, struct CallbackData *ui) {
+	/* g_print("parsing from: '%s'\n", path); */
+	char *buf = malloc(10);
+	FILE *file = fopen(path, "r");
+	while (fgets(buf, 9, file)) {
+		buf[7] = '\0'; // strip newline
+		ui->color_data = color_from_hex(buf);
+		add_new_color(ui);	
+		/* g_print("%s", buf); */
+	}
+	free(buf);
+	fclose(file);
 }

@@ -11,7 +11,7 @@ void show_color(UNUSED GtkWidget *widget, struct CallbackData *data) {
 	struct Color color_dark = color_apply(&data->color_data, -25);
 	char *color_text = malloc(20);
 	color_set_bg(&data->color_data, data->color, color_text);
-	gtk_label_set_text(GTK_LABEL(data->hex), color_text);
+	gtk_label_set_text(GTK_LABEL(data->hex), color_text); // save an allocation
 	
 	color_set_bg(&color_light, data->color_light, color_text);
 	color_set_bg(&color_dark, data->color_dark, color_text);
