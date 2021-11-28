@@ -32,6 +32,7 @@ void on_file_drop(
 
 int main(int argc, char ** argv) {
 	gtk_init(&argc, &argv);
+	register_resource();
 
 	/*
 	              Window

@@ -16,19 +16,22 @@ $ mv colr ~/.local/bin # Move to path
 To use it, run: `colr`
 
 Requirements:
-Gtk 3 Development Headers (libgtk-3-dev)
-X11 Development Headers   (libx11-dev)
+Gtk3 Development Headers (libgtk-3-dev)
+X11  Development Headers (libx11-dev)
 
 Using external screenshot program:
-$ make build-no-x11 exe=<PROGRAM THAT OUTPUTS HEXCODE>
+$ make build exe=<PROGRAM THAT OUTPUTS HEXCODE>
+
+While currently, complex picking behaviour is not supported, 
+I recommend you use https://github.com/Soft/xcolor as a external color picking program.
 
 TODO
 ----
-- Support Alpha
-- Package resources correctly
+- Package resources correctly   DONE
 - Show current color while picking
 - Be better at pulling colors from your theme
 - Pull most common color from image in DnD
+- Support Alpha
 - Drag and drop support         DONE
 - Edit colors                   DONE
 - Deal with duplicate colors    DONE

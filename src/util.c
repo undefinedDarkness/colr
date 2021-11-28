@@ -1,4 +1,5 @@
 #include "app.h"
+#include "resources.h"
 
 void paste_to_clipboard(UNUSED GtkWidget* parent, GtkWidget *source) {
 	GtkClipboard* clip = gtk_clipboard_get_default(gdk_display_get_default());
@@ -24,7 +25,8 @@ void attach_menu(GtkWidget* self, GdkEvent *event, GtkWidget *menu) {
 
 void load_css() {
 	GtkCssProvider *provider = gtk_css_provider_new();
-	gtk_css_provider_load_from_path(provider, "app.css", NULL);
+	gtk_css_provider_load_from_resource(provider, "/undefinedDarkness/colr/app.css");
+	/* gtk_css_provider_load_from_path(provider, "app.css", NULL); */
 	GdkScreen *display = gdk_display_get_default_screen(gdk_display_get_default());
 	gtk_style_context_add_provider_for_screen(display, GTK_STYLE_PROVIDER(provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 }
@@ -95,4 +97,9 @@ void parse_colors_from_file(const char* path, struct CallbackData *ui) {
 	}
 	free(buf);
 	fclose(file);
+}
+
+void register_resource() {
+	GResource *res = index_get_resource();
+	g_resources_register(res);
 }

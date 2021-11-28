@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+	<gresource prefix="/undefinedDarkness/colr">
+		<file>placeholder.png</file>
+		<file compressed="true">app.css</file>
+  </gresource>
+</gresources>

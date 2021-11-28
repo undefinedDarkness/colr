@@ -77,7 +77,10 @@ GtkWidget *create_color_row(const char *label, GtkWidget *panel) {
 
 	gtk_box_pack_start(GTK_BOX(row), show, 1, 1, 0);
 	gtk_box_pack_start(GTK_BOX(row), clipboard, 0, 0, 0);
-	gtk_container_add(GTK_CONTAINER(panel), row);
+
+	GtkWidget *frame = gtk_frame_new(NULL);
+	gtk_container_add(GTK_CONTAINER(frame), row);
+	gtk_container_add(GTK_CONTAINER(panel), frame);
 	return show;
 }
 

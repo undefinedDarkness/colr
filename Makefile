@@ -1,8 +1,17 @@
 imports = `pkg-config --cflags --libs gtk+-3.0 x11`
-options = -Wall -Wno-deprecated-declarations  # -fsanitize=address
+options = -Wall -Wno-deprecated-declarations -Os 
+linker-opts=-Iresources/
+.DEFAULT_GOAL := build
 
-build: src/*.c
-	cc src/*.c src/**/*.c -o colr -g $(imports) $(options) 
+ifneq ($(exe),)
+linker-opts += '-DSCREENSHOT_PROGRAM="$(exe)"'
+endif
 
-build-no-x11: src/*.c
-	cc src/*.c src/**/*.c -o colr '-DSCREENSHOT_PROGRAM="$(exe)"' $(imports) $(options)
+build: resource src/*.c
+	cc src/*.c src/**/*.c resources/*.c -o colr $(linker-opts) $(imports) $(options)
+
+.ONESHELL:
+resource: resources/*
+	cd resources
+	glib-compile-resources index.xml --generate-source --target=resources.c
+	glib-compile-resources index.xml --generate-header --target=resources.h

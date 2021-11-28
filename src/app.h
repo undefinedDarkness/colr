@@ -37,14 +37,15 @@ enum FileTypes {
 
 // User Interface:
 GtkWidget *create_color_row(const char *label, GtkWidget *panel);
+GtkWidget *create_menu(struct CallbackData *ui);
 void add_new_color(struct CallbackData *data);
 void color_edit_menu (GtkWidget *self, struct CallbackData *ui);
 void show_color(UNUSED GtkWidget *widget, struct CallbackData *data);
-GtkWidget *create_menu(struct CallbackData *ui);
 void apply_style (GtkWidget *w, char*style);
 
 // Behaviour:
 void load_css();
+void register_resource();
 void paste_to_clipboard(UNUSED GtkWidget* parent, GtkWidget *source);
 void remove_current_color(UNUSED GtkWidget*self, struct CallbackData *data);
 void free_2nd(UNUSED GtkWidget *widget, struct CallbackData *data);
