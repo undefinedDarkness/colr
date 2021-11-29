@@ -27,12 +27,13 @@ I recommend you use https://github.com/Soft/xcolor as a external color picking p
 
 TODO
 ----
-- Package resources correctly   DONE
-- Show current color while picking
-- Be better at pulling colors from your theme
-- Pull most common color from image in DnD
+- Advanced color picking        ----
+- Better DnD image support      DONE 
 - Support Alpha
+- Change mouse cursor
 - Drag and drop support         DONE
+- Package resources correctly   DONE
+- Be more consistent with theme DONE
 - Edit colors                   DONE
 - Deal with duplicate colors    DONE
 - Save picked colors to a file  DONE

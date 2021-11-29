@@ -71,7 +71,7 @@ GtkWidget *create_color_row(const char *label, GtkWidget *panel) {
 	GtkWidget *show = gtk_label_new("");
 	gtk_label_set_selectable(GTK_LABEL(show), 1);
 	
-	GtkWidget *clipboard = gtk_button_new_from_icon_name("gtk-copy", GTK_ICON_SIZE_BUTTON);
+	GtkWidget *clipboard = gtk_button_new_from_icon_name("copy-button-symbolic", GTK_ICON_SIZE_BUTTON);
 	g_signal_connect(G_OBJECT(clipboard), "clicked", G_CALLBACK(paste_to_clipboard), show);
 	/* on_hover_pointer(clipboard); */
 

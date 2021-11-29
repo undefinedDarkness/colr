@@ -7,6 +7,15 @@ void paste_to_clipboard(UNUSED GtkWidget* parent, GtkWidget *source) {
 	gtk_clipboard_set_text(clip, to_paste, strlen(to_paste));
 }
 
+int starts_with(char *check, char *full) {
+	for (int i = 0; i < strlen(check); i++) {
+		if (check[i] != full[i]) {
+			return 1;
+		}
+	}
+	return 0;
+}
+
 // Simply frees the 2nd item it gets
 void free_2nd(UNUSED GtkWidget *widget, struct CallbackData *data) {
 	free(data);
@@ -99,7 +108,10 @@ void parse_colors_from_file(const char* path, struct CallbackData *ui) {
 	fclose(file);
 }
 
-void register_resource() {
+void init_resource() {
 	GResource *res = index_get_resource();
 	g_resources_register(res);
+	
+	GtkIconTheme *theme = gtk_icon_theme_get_default();
+	gtk_icon_theme_add_resource_path (theme, "/undefinedDarkness/colr/icons");
 }

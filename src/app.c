@@ -23,7 +23,19 @@ void on_file_drop(
 	if (strcmp(type, "text/uri-list") == 0) {
 		char **uris = gtk_selection_data_get_uris(sel);
 		const char* path = g_uri_get_path(g_uri_parse(uris[0], 0, NULL));
-		parse_colors_from_file(path, ui);
+		char *ft = g_content_type_guess(path, NULL, 0, NULL);
+		if (strcmp(ft, "application/octet-stream") == 0 || strcmp(ft, "text/plain") == 0) { 
+			parse_colors_from_file(path, ui);
+		}
+		else if (starts_with("image/", ft) == 0) {
+			struct Color c;
+			color_get_dominant(path, &c);
+			ui->color_data = c;
+			add_new_color(ui);
+		}
+		else {
+			g_warning("Unknown filetype: %s", ft);
+		}
 		free(uris);
 	}
 
@@ -32,7 +44,7 @@ void on_file_drop(
 
 int main(int argc, char ** argv) {
 	gtk_init(&argc, &argv);
-	register_resource();
+	init_resource();
 
 	/*
 	              Window
@@ -67,7 +79,7 @@ int main(int argc, char ** argv) {
 		gtk_box_pack_start(GTK_BOX(layout), sidebar_container, 0, 0 , 0);
 	
 			// Color picker button
-			GtkWidget *picker = gtk_button_new_from_icon_name("color-picker", GTK_ICON_SIZE_BUTTON);
+			GtkWidget *picker = gtk_button_new_from_icon_name("color-picker-button-symbolic", GTK_ICON_SIZE_BUTTON);
 			gtk_container_add(GTK_CONTAINER(sidebar), picker);
 
 	// Main preview panel

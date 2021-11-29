@@ -90,6 +90,15 @@ char *create_color_range_gradient(struct Color c, enum ColorChannel channel,char
 	return buffer;
 }
 
+void color_get_dominant(const char*path, struct Color *c) {
+	// Get a image and scale it down to 1x1 to get the dominant color
+	GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_scale(path, 1, 1, FALSE, NULL);
+	unsigned char *pixels = gdk_pixbuf_get_pixels(pixbuf);
+	c->r = (uint8_t)pixels[0];
+	c->g = (uint8_t)pixels[1];
+	c->b = (uint8_t)pixels[2];
+}
+
 #ifndef SCREENSHOT_PROGRAM
 struct Color color_pick () {
 	Display *display = XOpenDisplay(NULL);
