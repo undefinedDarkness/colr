@@ -1,5 +1,9 @@
 #include "../app.h"
 
+// DO NOT TRY TO MAKE A EditorCallbackData struct
+// It simply doesnt work for some reason
+// and I end up in segfault hell
+
 static GtkWidget *label_scale(GtkWidget *scale, const char* label) {
 	GtkWidget * container = BOX;
 	GtkWidget *lw = gtk_label_new(label);

@@ -1,10 +1,22 @@
 #include "app.h"
 #include "resources.h"
 
-void paste_to_clipboard(UNUSED GtkWidget* parent, GtkWidget *source) {
+void paste_color_to_clipboard(UNUSED GtkWidget* parent, struct Color *c) {
+	GtkClipboard* clip = gtk_clipboard_get_default(gdk_display_get_default());
+	/* const char *to_paste = gtk_label_get_text(GTK_LABEL(source)); */
+	char *to_paste = malloc(8);
+	color_to_hex(c, to_paste);
+	gtk_clipboard_set_text(clip, to_paste, 8);
+	free(to_paste);
+}
+
+void paste_label_to_clipboard(UNUSED GtkWidget* parent, GtkWidget *source) {
 	GtkClipboard* clip = gtk_clipboard_get_default(gdk_display_get_default());
 	const char *to_paste = gtk_label_get_text(GTK_LABEL(source));
-	gtk_clipboard_set_text(clip, to_paste, strlen(to_paste));
+	/* char *to_paste = malloc(8); */
+	/* color_to_hex(&c, to_paste); */
+	gtk_clipboard_set_text(clip, to_paste, 8);
+	/* free(to_paste); */
 }
 
 int starts_with(char *check, char *full) {

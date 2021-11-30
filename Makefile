@@ -1,5 +1,5 @@
-imports = `pkg-config --cflags --libs gtk+-3.0 x11`
-options = -Wall -Wno-deprecated-declarations -Os 
+imports = `pkg-config --cflags --libs gtk+-3.0 x11` -lm
+options = -Wall -Wno-deprecated-declarations 
 linker-opts=-Iresources/
 .DEFAULT_GOAL := build
 

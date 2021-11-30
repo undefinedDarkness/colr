@@ -14,9 +14,9 @@ struct Color color_from_hex(char *hex);
 void color_get_dominant(const char*path, struct Color *c);
 
 // Color Conversion Functions
-char* color_to_hex(struct Color *color, char*space);
-char* color_to_rgb(struct Color *color, char*space);
-char *color_to_hsv(struct Color *color, char*space);
+void color_to_hex(struct Color *color, char*space);
+void color_to_rgb(struct Color *color, char*space);
+void color_to_hsv(struct Color *color, char*space);
 
 // Get & Set Widget Background
 void color_set_bg(struct Color *color_data, GtkWidget *widget, char* space);

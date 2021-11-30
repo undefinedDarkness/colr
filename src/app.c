@@ -104,16 +104,15 @@ int main(int argc, char ** argv) {
 		
 	// Assemble data to pass.
 	// TODO: Dont create variables, just use the struct.
+	struct Colorspace*  spaces = init_color_spaces(panel);
 	struct CallbackData ui = {
 		.color_light = color_light,
 		.color = color,
 		.color_dark = color_dark,
-		.rgb = create_color_row("RGB", panel),
-		.hex = create_color_row("HEX", panel),
-		.hsv = create_color_row("HSV", panel),
 		.sidebar = sidebar,
 		.panel = panel,
 	};
+	ui.color_spaces = spaces;
 
 	// Connect signals
 	g_signal_connect(G_OBJECT(sidebar_container), "button-press-event", G_CALLBACK(attach_menu), create_menu(&ui));
@@ -137,4 +136,5 @@ int main(int argc, char ** argv) {
 	gtk_widget_show_all(window);
 	gtk_widget_hide(panel);
 	gtk_main();
+	free(spaces);
 }

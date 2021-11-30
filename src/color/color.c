@@ -13,22 +13,21 @@ struct Color color_from_hex(char *hex)  {
 	return re;
 }
 
-char *color_to_hex(struct Color *color, char*space) {
+void color_to_hex(struct Color *color, char*space) {
 	sprintf(space, "#%02x%02x%02x", color->r, color->g, color->b);
-	return space;
+	/* return space; */
 }
 
-char *color_to_rgb(struct Color *color,char*space) {
+void color_to_rgb(struct Color *color,char*space) {
 	sprintf(space, "rgb(%d,%d,%d)", color->r, color->g, color->b);
-	return space;
+	/* return space; */
 }
 
-char *color_to_hsv(struct Color *color, char*space) {
+void color_to_hsv(struct Color *color, char*space) {
 	double h, s, v;
 	gtk_rgb_to_hsv(color->r/255., color->g/255., color->b/255., &h, &s, &v);
-	// TODO: Dont be stupid here :(
-	sprintf(space, "hsv(%.0f,%.0f%%,%.0f%%)", (h * 255) > 0 ? (h * 255) + 10 : 0, s * 100, v * 100);
-	return space;
+	sprintf(space, "hsv(%.0f,%.0f%%,%.0f%%)", h * 360, s * 100, v * 100);
+	/* return space; */
 }
 
 // Apply a color to a widget's background

@@ -29,8 +29,11 @@ TODO
 ----
 - Advanced color picking        ----
 - Better DnD image support      DONE 
-- Support Alpha
-- Change mouse cursor
+- Allow dynamic changing of color spaces
+- Refactor callbacks
+- Remove extras from CallbackData
+- Create more structs
+- Change mouse cursor           ----
 - Drag and drop support         DONE
 - Package resources correctly   DONE
 - Be more consistent with theme DONE
