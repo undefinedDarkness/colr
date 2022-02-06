@@ -131,10 +131,16 @@ int main(int argc, char ** argv) {
 	};
 	gtk_drag_dest_set(sidebar, GTK_DEST_DEFAULT_ALL, targets, G_N_ELEMENTS(targets), GDK_ACTION_COPY);
 	g_signal_connect(G_OBJECT(sidebar), "drag-data-received", G_CALLBACK(on_file_drop), &ui);
-
+    
 	load_css();
+
 	gtk_widget_show_all(window);
-	gtk_widget_hide(panel);
-	gtk_main();
+
+    gtk_widget_hide(panel);
+    button_cursor(picker, NULL);
+    button_cursor(color_light, NULL);
+    button_cursor(color_dark, NULL);
+    
+    gtk_main();
 	free(spaces);
 }

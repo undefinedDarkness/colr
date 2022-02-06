@@ -1,5 +1,6 @@
 #include "app.h"
 #include "resources.h"
+#include <ctype.h>
 
 void paste_color_to_clipboard(UNUSED GtkWidget* parent, struct Color *c) {
 	GtkClipboard* clip = gtk_clipboard_get_default(gdk_display_get_default());
@@ -8,6 +9,12 @@ void paste_color_to_clipboard(UNUSED GtkWidget* parent, struct Color *c) {
 	color_to_hex(c, to_paste);
 	gtk_clipboard_set_text(clip, to_paste, 8);
 	free(to_paste);
+}
+
+void button_cursor(GtkWidget *btn, char*cursor) {
+  gdk_window_set_cursor(
+                        gtk_button_get_event_window(GTK_BUTTON(btn)),
+                        gdk_cursor_new_from_name(gdk_display_get_default(), cursor == NULL ? "pointer" : cursor));
 }
 
 void paste_label_to_clipboard(UNUSED GtkWidget* parent, GtkWidget *source) {
@@ -26,6 +33,12 @@ int starts_with(char *check, char *full) {
 		}
 	}
 	return 0;
+}
+
+void upper_case(char *s) {
+  for (int i = 0; i < strlen(s); i++) {
+    s[i] = toupper(s[i]);
+  }
 }
 
 // Simply frees the 2nd item it gets

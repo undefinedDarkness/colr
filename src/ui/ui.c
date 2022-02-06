@@ -14,7 +14,7 @@ void show_color(UNUSED GtkWidget *widget, struct CallbackData *data) {
 	color_set_bg(&color_light, data->color_light, color_text);
 	color_set_bg(&color_dark, data->color_dark, color_text);
 	
-	for (int i = 0; i < ENABLED_COLOR_SPACES; i++) {
+	for (int i = 0; i < TOTAL_ENABLED_COLOR_SPACES; i++) {
 		struct Colorspace cs = data->color_spaces[i];
 		cs.formatter(&data->color_data, color_text);
 		gtk_label_set_text(GTK_LABEL(cs.display), color_text);
@@ -53,6 +53,7 @@ void add_new_color(struct CallbackData *data) {
 	// Switch to the new color
 	show_color(NULL, copy);
 	gtk_container_add(GTK_CONTAINER(data->sidebar), button);
+    button_cursor(button, NULL);
 
 	end:
 	g_list_free(children);
@@ -68,8 +69,8 @@ GtkWidget *create_color_row(const char *label, GtkWidget *panel) {
 	
 	GtkWidget *clipboard = gtk_button_new_from_icon_name("copy-button-symbolic", GTK_ICON_SIZE_BUTTON);
 	g_signal_connect(G_OBJECT(clipboard), "clicked", G_CALLBACK(paste_label_to_clipboard), show);
-	/* on_hover_pointer(clipboard); */
-
+    g_signal_connect(G_OBJECT(clipboard), "realize", G_CALLBACK(button_cursor), NULL);
+    
 	gtk_box_pack_start(GTK_BOX(row), show, 1, 1, 0);
 	gtk_box_pack_start(GTK_BOX(row), clipboard, 0, 0, 0);
 

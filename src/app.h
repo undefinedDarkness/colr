@@ -1,7 +1,6 @@
 #ifndef APP_INCLUDED
 #define APP_INCLUDED
-
-#define ENABLED_COLOR_SPACES 3
+#define TOTAL_ENABLED_COLOR_SPACES 3
 #define UNUSED __attribute__((unused))	
 #define BOX gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0)
 #include <gtk/gtk.h>
@@ -56,5 +55,5 @@ void free_2nd(UNUSED GtkWidget *widget, struct CallbackData *data);
 void parse_colors_from_file(const char* path, struct CallbackData *ui);
 void save_to_disk(GtkWidget*self, GtkWidget *widget);
 void attach_menu(GtkWidget *self, GdkEvent *event, GtkWidget *sidebar);
-
+void button_cursor(GtkWidget *btn, char* cursor);
 #endif
