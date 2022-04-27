@@ -99,7 +99,8 @@ void color_get_dominant(const char*path, struct Color *c) {
 }
 
 #ifndef SCREENSHOT_PROGRAM
-struct Color color_pick () {
+int color_pick (struct Color *color) {
+	int status = 0;
 	Display *display = XOpenDisplay(NULL);
 	Window root = DefaultRootWindow(display);
 
@@ -110,7 +111,6 @@ struct Color color_pick () {
 	XGetWindowAttributes(display, root, &gwa);
 
 	XGrabKeyboard(display, root, 0, GrabModeAsync, GrabModeAsync, CurrentTime);
-	struct Color color;
 
 	for(;;) {
 		XEvent e;
@@ -119,12 +119,13 @@ struct Color color_pick () {
 		if (e.type == ButtonPress && e.xbutton.button == Button1) {
 				unsigned long pixel = XGetPixel(image, e.xbutton.x_root, e.xbutton.y_root);
 				// printf("%d,%d,%d ", (pixel >> 0x10) & 0xFF, (pixel >> 0x08) & 0xFF, pixel & 0xFF);
-				color.r = (pixel >> 0x10) & 0xFF;
-				color.g = (pixel >> 0x08) & 0xFF;
-				color.b = pixel & 0xFF;
+				color->r = (pixel >> 0x10) & 0xFF;
+				color->g = (pixel >> 0x08) & 0xFF;
+				color->b = pixel & 0xFF;
 				break;
 		} else if (e.type == ButtonPress ||
 				(e.type == KeyPress && (e.xkey.keycode == 53))) {
+			status = -1;
 			break;
 		}
 		XDestroyImage(image);
@@ -137,24 +138,24 @@ struct Color color_pick () {
 	XFreeCursor(display, cursor);
 	XDestroyWindow(display, root);
 	XCloseDisplay(display);
-	return color;
+
+	return status;
 }
 #else
-struct Color color_pick () {
+int color_pick (struct Color *color) {
+	int status = 0;
 	FILE *process = popen(SCREENSHOT_PROGRAM, "r");
 	if (process == NULL) {
 		fprintf(stderr, "Failed to run command: %s - Are you using any shell script?", SCREENSHOT_PROGRAM);
 		exit(1);
 	}
 
-	int r, g, b;
-	fscanf(process, "#%02x%02x%02x", &r, &g, &b);
+	if (fscanf(process, "#%02x%02x%02x", &color->r, &color->g, &color->b) != 3) {
+		status = -1;
+	}
+
 	pclose(process);
-	struct Color c = {
-		.r = r,
-		.g = g,
-		.b = b
-	};
-	return c;
+
+	return status;
 }
 #endif

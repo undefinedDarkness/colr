@@ -7,7 +7,7 @@ struct Color {
 enum ColorChannel { COLOR_CHANNEL_RED, COLOR_CHANNEL_GREEN, COLOR_CHANNEL_BLUE };
 
 // Misc
-struct Color color_pick ();
+int color_pick (struct Color *color);
 struct Color color_apply (struct Color *c, int amount);
 char *create_color_range_gradient(struct Color c, enum ColorChannel, char*buffer);
 struct Color color_from_hex(char *hex);
