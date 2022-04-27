@@ -1,7 +1,11 @@
 #include "app.h"
 
 void add_new_color_from_pick(UNUSED GtkWidget *self, struct CallbackData *ui) {
-	ui->color_data = color_pick();
+	/* do not add a new color if color_pick fails */
+	if (color_pick(&ui->color_data) == -1) {
+		return;
+	}
+
 	add_new_color(ui);
 }
 
