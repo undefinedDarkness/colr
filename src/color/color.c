@@ -115,20 +115,20 @@ int color_pick (struct Color *color) {
 	for(;;) {
 		XEvent e;
 		XNextEvent(display, &e);
-		XImage *image = XGetImage(display, root, 0, 0, gwa.width, gwa.height, AllPlanes, ZPixmap);
 		if (e.type == ButtonPress && e.xbutton.button == Button1) {
+				XImage *image = XGetImage(display, root, 0, 0, gwa.width, gwa.height, AllPlanes, ZPixmap);
 				unsigned long pixel = XGetPixel(image, e.xbutton.x_root, e.xbutton.y_root);
 				// printf("%d,%d,%d ", (pixel >> 0x10) & 0xFF, (pixel >> 0x08) & 0xFF, pixel & 0xFF);
 				color->r = (pixel >> 0x10) & 0xFF;
 				color->g = (pixel >> 0x08) & 0xFF;
 				color->b = pixel & 0xFF;
+				XDestroyImage(image);
 				break;
 		} else if (e.type == ButtonPress ||
 				(e.type == KeyPress && (e.xkey.keycode == 53))) {
 			status = -1;
 			break;
 		}
-		XDestroyImage(image);
 	}
 
 	/* will be done on connection close anw */
