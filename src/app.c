@@ -67,6 +67,7 @@ int main(int argc, char ** argv) {
 	GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title(GTK_WINDOW(window), "Colr Pickr");
 	gtk_window_set_default_size(GTK_WINDOW(window), 400, 300);
+	gtk_window_set_type_hint(GTK_WINDOW(window), GDK_WINDOW_TYPE_HINT_DIALOG);
 
 	/* The weird indentation is to show the structure of the widgets with respect to each other.  */
 	GtkWidget *layout = BOX;

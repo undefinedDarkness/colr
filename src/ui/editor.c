@@ -1,8 +1,13 @@
 #include "../app.h"
 
-// DO NOT TRY TO MAKE A EditorCallbackData struct
-// It simply doesnt work for some reason
-// and I end up in segfault hell
+// Internal State Structure.
+struct EditorCB {
+	GtkWidget *scale_r;
+	GtkWidget *scale_g;
+	GtkWidget *scale_b;
+	char *buffer;
+	struct CallbackData *cb;
+};
 
 static GtkWidget *label_scale(GtkWidget *scale, const char* label) {
 	GtkWidget * container = BOX;
@@ -13,51 +18,56 @@ static GtkWidget *label_scale(GtkWidget *scale, const char* label) {
 	return container;
 }
 
-static void update_r(GtkWidget *self, struct CallbackData *ui) {
-	ui->color_data.r = gtk_range_get_value(GTK_RANGE(self));
+static void update_r(GtkWidget *self, struct EditorCB *ui) {
+	ui->cb->color_data.r = gtk_range_get_value(GTK_RANGE(self));
 
 	// This will get recreated and dumped many times...
 	// Figure out a better way
-	create_color_range_gradient(ui->color_data, COLOR_CHANNEL_GREEN, ui->buffer);
+	create_color_range_gradient(ui->cb->color_data, COLOR_CHANNEL_GREEN, ui->buffer);
 	apply_style(ui->scale_g, ui->buffer);
-	create_color_range_gradient(ui->color_data, COLOR_CHANNEL_BLUE, ui->buffer);
+	create_color_range_gradient(ui->cb->color_data, COLOR_CHANNEL_BLUE, ui->buffer);
 	apply_style(ui->scale_b, ui->buffer);
 
-	show_color(NULL, ui);
+	show_color(NULL, ui->cb);
 	/* update_editor(ui); */
 };
 
-static void update_g(GtkWidget *self, struct CallbackData *ui) {
+static void update_g(GtkWidget *self, struct EditorCB *ui) {
 
-	ui->color_data.g = gtk_range_get_value(GTK_RANGE(self));
-	create_color_range_gradient(ui->color_data, COLOR_CHANNEL_RED, ui->buffer);
+	ui->cb->color_data.g = gtk_range_get_value(GTK_RANGE(self));
+	create_color_range_gradient(ui->cb->color_data, COLOR_CHANNEL_RED, ui->buffer);
 	apply_style(ui->scale_r, ui->buffer);
-	create_color_range_gradient(ui->color_data, COLOR_CHANNEL_BLUE, ui->buffer);
+	create_color_range_gradient(ui->cb->color_data, COLOR_CHANNEL_BLUE, ui->buffer);
 	apply_style(ui->scale_b, ui->buffer);
 
-	show_color(NULL, ui);
+	show_color(NULL, ui->cb);
 	/* update_editor(ui); */
 };
 
-static void update_b(GtkWidget *self, struct CallbackData *ui) {
-	ui->color_data.b = gtk_range_get_value(GTK_RANGE(self));
-	create_color_range_gradient(ui->color_data, COLOR_CHANNEL_RED, ui->buffer);
+static void update_b(GtkWidget *self, struct EditorCB *ui) {
+	ui->cb->color_data.b = gtk_range_get_value(GTK_RANGE(self));
+	create_color_range_gradient(ui->cb->color_data, COLOR_CHANNEL_RED, ui->buffer);
 	apply_style(ui->scale_r, ui->buffer);
-	create_color_range_gradient(ui->color_data, COLOR_CHANNEL_GREEN, ui->buffer);
+	create_color_range_gradient(ui->cb->color_data, COLOR_CHANNEL_GREEN, ui->buffer);
 	apply_style(ui->scale_g, ui->buffer);
 
-	show_color(NULL, ui);
+	show_color(NULL, ui->cb);
 	/* update_editor(ui); */
 };
 
-void editor_on_selection(GtkWidget *self, UNUSED int resp, struct CallbackData *ui) {
-	add_new_color(ui);
-	free(ui->buffer); // dont need you anymore
+void editor_on_selection(GtkWidget *self, UNUSED int resp, struct EditorCB *ui) {
+	add_new_color(ui->cb);
+	free(ui->buffer);
+	free(ui);
 	gtk_widget_destroy(self);
 }
 
-void color_edit_menu(GtkWidget *self, struct CallbackData *ui) {
-	ui->color_data = color_get_bg(ui->color); // Get starting color
+
+
+void color_edit_menu(UNUSED GtkWidget *self, struct CallbackData *cbd) {
+	struct EditorCB *ui = malloc(sizeof(struct EditorCB));
+	ui->cb = cbd;
+	cbd->color_data = color_get_bg(cbd->color); // Get starting color
 	ui->buffer = malloc(100); // This is super ugly yes but it saves a lottt of allocations
 	GtkWidget *dialog = gtk_dialog_new_with_buttons(
 			"Edit Color", 
@@ -71,11 +81,11 @@ void color_edit_menu(GtkWidget *self, struct CallbackData *ui) {
 
 	// TODO: Look into using the gtk color scale widget
 	ui->scale_r = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL, 0, 255, 5);
-	gtk_range_set_value(GTK_RANGE(ui->scale_r), ui->color_data.r);
+	gtk_range_set_value(GTK_RANGE(ui->scale_r), ui->cb->color_data.r);
 	ui->scale_g = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL, 0, 255, 5);
-	gtk_range_set_value(GTK_RANGE(ui->scale_g), ui->color_data.g);
+	gtk_range_set_value(GTK_RANGE(ui->scale_g), ui->cb->color_data.g);
 	ui->scale_b = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL, 0, 255, 5);
-	gtk_range_set_value(GTK_RANGE(ui->scale_b), ui->color_data.b);
+	gtk_range_set_value(GTK_RANGE(ui->scale_b), ui->cb->color_data.b);
 
 	update_r(ui->scale_r, ui); update_g(ui->scale_g, ui); update_b(ui->scale_b, ui);
 	g_signal_connect(G_OBJECT(ui->scale_r), "value-changed", G_CALLBACK(update_r), ui);

@@ -1,5 +1,6 @@
 #include "app.h"
 #include "resources.h"
+/* #include <cstddef> */
 #include <ctype.h>
 
 void paste_color_to_clipboard(UNUSED GtkWidget* parent, struct Color *c) {
@@ -27,7 +28,7 @@ void paste_label_to_clipboard(UNUSED GtkWidget* parent, GtkWidget *source) {
 }
 
 int starts_with(char *check, char *full) {
-	for (int i = 0; i < strlen(check); i++) {
+	for (size_t i = 0; i < strlen(check); i++) {
 		if (check[i] != full[i]) {
 			return 1;
 		}
@@ -36,7 +37,7 @@ int starts_with(char *check, char *full) {
 }
 
 void upper_case(char *s) {
-  for (int i = 0; i < strlen(s); i++) {
+  for (size_t i = 0; i < strlen(s); i++) {
     s[i] = toupper(s[i]);
   }
 }
@@ -47,7 +48,7 @@ void free_2nd(UNUSED GtkWidget *widget, struct CallbackData *data) {
 }
 
 // See: https://www.cc.gatech.edu/data_files/public/doc/gtk/tutorial/gtk_tut-14.html
-void attach_menu(GtkWidget* self, GdkEvent *event, GtkWidget *menu) {
+void attach_menu(UNUSED GtkWidget* self, GdkEvent *event, GtkWidget *menu) {
 	if (event->type == GDK_BUTTON_PRESS) {
 		GdkEventButton *event_button;
 		event_button = (GdkEventButton *)event;

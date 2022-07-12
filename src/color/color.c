@@ -36,7 +36,7 @@ void color_set_bg(struct Color *color_data, GtkWidget *widget, char* space) {
 	color_to_hex(color_data, space);
 	GdkRGBA color;
 	gdk_rgba_parse(&color, space); // TODO: Dont use this :(
-	gtk_widget_override_background_color(widget, GTK_STATE_NORMAL, &color);
+	gtk_widget_override_background_color(widget, GTK_STATE_FLAG_NORMAL, &color);
 	/* free(hex); */
 }
 
