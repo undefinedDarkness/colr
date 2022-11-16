@@ -1,6 +1,6 @@
-#include "app.h"
-#include "resources.h"
-/* #include <cstddef> */
+#include "util.h"
+#include "../resources/resources.h"
+#include "ui/ui.h"
 #include <ctype.h>
 
 void paste_color_to_clipboard(UNUSED GtkWidget* parent, struct Color *c) {
@@ -27,21 +27,6 @@ void paste_label_to_clipboard(UNUSED GtkWidget* parent, GtkWidget *source) {
 	/* free(to_paste); */
 }
 
-int starts_with(char *check, char *full) {
-	for (size_t i = 0; i < strlen(check); i++) {
-		if (check[i] != full[i]) {
-			return 1;
-		}
-	}
-	return 0;
-}
-
-void upper_case(char *s) {
-  for (size_t i = 0; i < strlen(s); i++) {
-    s[i] = toupper(s[i]);
-  }
-}
-
 // Simply frees the 2nd item it gets
 void free_2nd(UNUSED GtkWidget *widget, struct CallbackData *data) {
 	free(data);
@@ -58,33 +43,7 @@ void attach_menu(UNUSED GtkWidget* self, GdkEvent *event, GtkWidget *menu) {
 	}
 }
 
-void load_css() {
-	GtkCssProvider *provider = gtk_css_provider_new();
-	gtk_css_provider_load_from_resource(provider, "/undefinedDarkness/colr/app.css");
-	/* gtk_css_provider_load_from_path(provider, "app.css", NULL); */
-	GdkScreen *display = gdk_display_get_default_screen(gdk_display_get_default());
-	gtk_style_context_add_provider_for_screen(display, GTK_STYLE_PROVIDER(provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-}
 
-void remove_current_color(UNUSED GtkWidget*self, struct CallbackData *data) {
-	GList *children = gtk_container_get_children(GTK_CONTAINER(data->sidebar));
-	struct Color ch = color_get_bg(data->color);
-	children = children->next; // Skip picker button
-	while (children != NULL) {
-			struct Color c = color_get_bg(children->data);
-			if (ch.r == c.r && ch.g == c.g && ch.b == c.b) {
-				gtk_widget_destroy(children->data);
-				children = children->next;
-				if (children == NULL) {
-					children = g_list_first(children);
-				}
-				gtk_button_clicked(children->data);
-				break;
-			}
-			children = children->next;
-	}	
-	g_list_free(children);
-}
 
 // This function is the opposite of tiny...
 void save_to_disk(UNUSED GtkWidget*self, GtkWidget*sidebar) {
@@ -134,10 +93,36 @@ void parse_colors_from_file(const char* path, struct CallbackData *ui) {
 	fclose(file);
 }
 
-void init_resource() {
-	GResource *res = index_get_resource();
-	g_resources_register(res);
+
+
+void on_file_drop(
+		UNUSED GtkWidget *self, 
+		UNUSED GdkDragContext *ctx,
+		UNUSED int x, UNUSED int y,
+		GtkSelectionData *sel,
+		UNUSED int info,
+		UNUSED int time,
+		struct CallbackData *ui) {
+	char* type = gdk_atom_name(gtk_selection_data_get_data_type(sel));
 	
-	GtkIconTheme *theme = gtk_icon_theme_get_default();
-	gtk_icon_theme_add_resource_path (theme, "/undefinedDarkness/colr/icons");
+	if (strcmp(type, "text/uri-list") == 0) {
+		char **uris = gtk_selection_data_get_uris(sel);
+		const char* path = g_uri_get_path(g_uri_parse(uris[0], 0, NULL));
+		char *ft = g_content_type_guess(path, NULL, 0, NULL);
+		if (strcmp(ft, "application/octet-stream") == 0 || strcmp(ft, "text/plain") == 0) { 
+			parse_colors_from_file(path, ui);
+		}
+		else if (strncmp("image/", ft, sizeof("image/")) == 0) {
+			struct Color c;
+			color_get_dominant(path, &c);
+			ui->color_data = c;
+			add_new_color(ui);
+		}
+		else {
+			g_warning("Unknown filetype: %s", ft);
+		}
+		free(uris);
+	}
+
+	g_free(type);
 }

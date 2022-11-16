@@ -1,4 +1,5 @@
-#include "../app.h"
+#include "ui.h"
+#include "../util.h"
 
 void apply_style (GtkWidget *w, char*style) {
 	GtkCssProvider *css = gtk_css_provider_new();
@@ -9,12 +10,12 @@ void apply_style (GtkWidget *w, char*style) {
 void show_color(UNUSED GtkWidget *widget, struct CallbackData *data) {
 	struct Color color_light = color_apply(&data->color_data, 25);
 	struct Color color_dark = color_apply(&data->color_data, -25);
+	color_set_bg(&data->color_data, data->color);
+	color_set_bg(&color_light, data->color_light);
+	color_set_bg(&color_dark, data->color_dark);
+
 	char *color_text = malloc(20);
-	color_set_bg(&data->color_data, data->color, color_text);
-	color_set_bg(&color_light, data->color_light, color_text);
-	color_set_bg(&color_dark, data->color_dark, color_text);
-	
-	for (int i = 0; i < TOTAL_ENABLED_COLOR_SPACES; i++) {
+	for (int i = 0; i < ENABLED_COLOR_SPACES; i++) {
 		struct Colorspace cs = data->color_spaces[i];
 		cs.formatter(&data->color_data, color_text);
 		gtk_label_set_text(GTK_LABEL(cs.display), color_text);
@@ -39,15 +40,13 @@ void add_new_color(struct CallbackData *data) {
 
 	GtkWidget *button = gtk_button_new();
 
-	char *space = malloc(8);
-	color_set_bg(&data->color_data, button, space);
-	free(space);
+	struct CallbackData *copy = malloc(sizeof (struct CallbackData));
+	color_set_bg(&data->color_data, button);
 
 	// Create a copy of the struct 
-	struct CallbackData *copy = malloc(sizeof (struct CallbackData));
 	memcpy(copy, data, sizeof (struct CallbackData));
 	g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(show_color), copy); 
-	g_signal_connect(G_OBJECT(button), "destroy", G_CALLBACK(free_2nd), copy);
+	g_signal_connect(G_OBJECT(button), "destroy", G_CALLBACK(free_2nd), copy); // FREED HERE
 	gtk_widget_show_all(button);
 	
 	// Switch to the new color
@@ -99,4 +98,22 @@ GtkWidget *create_menu(struct CallbackData *ui) {
 	return right_click_menu;
 }
 
-
+void remove_current_color(UNUSED GtkWidget*self, struct CallbackData *data) {
+	GList *children = gtk_container_get_children(GTK_CONTAINER(data->sidebar));
+	struct Color ch = color_get_bg(data->color);
+	children = children->next; // Skip picker button
+	while (children != NULL) {
+			struct Color c = color_get_bg(children->data);
+			if (ch.r == c.r && ch.g == c.g && ch.b == c.b) {
+				gtk_widget_destroy(children->data);
+				children = children->next;
+				if (children == NULL) {
+					children = g_list_first(children);
+				}
+				gtk_button_clicked(children->data);
+				break;
+			}
+			children = children->next;
+	}	
+	g_list_free(children);
+}

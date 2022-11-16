@@ -28,16 +28,16 @@ I recommend you use https://github.com/Soft/xcolor as a external color picking p
 TODO
 ----
 - Advanced color picking          ----
-- Better DnD image support       DONE 
-- Allow dynamic changing of color spaces
+- Better DnD image support         
+- Dynamic Colour Spaces            DONE
 - Refactor callbacks
-- Remove extras from CallbackData
+- Remove extras from CallbackData  DONE 
 - Create more structs
-- Change mouse cursor            DONE
-- Drag and drop support           DONE
-- Package resources correctly    DONE
-- Be more consistent with theme DONE
-- Edit colors                        DONE
+- Change mouse cursor              DONE
+- Drag and drop support            DONE
+- Package resources correctly      DONE
+- Be more consistent with theme    DONE
+- Edit colors                      DONE
 - Deal with duplicate colors       DONE
 - Save picked colors to a file     DONE
 - Remove colors                    DONE

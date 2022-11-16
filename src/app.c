@@ -1,52 +1,42 @@
 #include "app.h"
+#include "util.h"
+#include "ui/ui.h"
+#include "ui/editor.h"
+#include "../resources/resources.h"
 
-void add_new_color_from_pick(UNUSED GtkWidget *self, struct CallbackData *ui) {
-	/* do not add a new color if color_pick fails */
+static void add_new_color_from_pick(UNUSED GtkWidget *self, struct CallbackData *ui) {
 	if (color_pick(&ui->color_data) == -1) {
 		return;
 	}
-
 	add_new_color(ui);
 }
 
-void add_new_color_from_widget(GtkWidget *self, struct CallbackData *ui) {
+static void add_new_color_from_widget(GtkWidget *self, struct CallbackData *ui) {
 	ui->color_data = color_get_bg(self);
 	add_new_color(ui);
 }
 
-void on_file_drop(
-		UNUSED GtkWidget *self, 
-		UNUSED GdkDragContext *ctx,
-		UNUSED int x, UNUSED int y,
-		GtkSelectionData *sel,
-		UNUSED int info,
-		UNUSED int time,
-		struct CallbackData *ui) {
-	char* type = gdk_atom_name(gtk_selection_data_get_data_type(sel));
-	
-	if (strcmp(type, "text/uri-list") == 0) {
-		char **uris = gtk_selection_data_get_uris(sel);
-		const char* path = g_uri_get_path(g_uri_parse(uris[0], 0, NULL));
-		char *ft = g_content_type_guess(path, NULL, 0, NULL);
-		if (strcmp(ft, "application/octet-stream") == 0 || strcmp(ft, "text/plain") == 0) { 
-			parse_colors_from_file(path, ui);
-		}
-		else if (starts_with("image/", ft) == 0) {
-			struct Color c;
-			color_get_dominant(path, &c);
-			ui->color_data = c;
-			add_new_color(ui);
-		}
-		else {
-			g_warning("Unknown filetype: %s", ft);
-		}
-		free(uris);
-	}
+/* -- Init Subroutines {{{ */
 
-	g_free(type);
+static void init_resource() {
+	GResource *res = index_get_resource();
+	g_resources_register(res);
+	
+	GtkIconTheme *theme = gtk_icon_theme_get_default();
+	gtk_icon_theme_add_resource_path (theme, "/undefinedDarkness/colr/icons");
 }
 
+static void load_css() {
+	GtkCssProvider *provider = gtk_css_provider_new();
+	gtk_css_provider_load_from_resource(provider, "/undefinedDarkness/colr/app.css"); // Loaded from resources file.
+	GdkScreen *display = gdk_display_get_default_screen(gdk_display_get_default());
+	gtk_style_context_add_provider_for_screen(display, GTK_STYLE_PROVIDER(provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+}
+
+/* }}} */
+
 int main(int argc, char ** argv) {
+	// Initialize GTK
 	gtk_init(&argc, &argv);
 	init_resource();
 
@@ -147,5 +137,7 @@ int main(int argc, char ** argv) {
     button_cursor(color_dark, NULL);
     
     gtk_main();
+
+	// --- CLEANUP ---
 	free(spaces);
 }

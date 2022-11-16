@@ -7,6 +7,10 @@
 #include <stdlib.h>
 #include "color.h"
 
+#include <math.h>
+
+/* -- CONVERSION --*/
+
 struct Color color_from_hex(char *hex)  {
 	struct Color re;
 	sscanf(hex, "#%02x%02x%02x", &re.r, &re.g, &re.b);
@@ -15,29 +19,53 @@ struct Color color_from_hex(char *hex)  {
 
 void color_to_hex(struct Color *color, char*space) {
 	sprintf(space, "#%02x%02x%02x", color->r, color->g, color->b);
-	/* return space; */
 }
 
 void color_to_rgb(struct Color *color,char*space) {
 	sprintf(space, "rgb(%d,%d,%d)", color->r, color->g, color->b);
-	/* return space; */
 }
 
 void color_to_hsv(struct Color *color, char*space) {
 	double h, s, v;
 	gtk_rgb_to_hsv(color->r/255., color->g/255., color->b/255., &h, &s, &v);
 	sprintf(space, "hsv(%.0f,%.0f%%,%.0f%%)", h * 360, s * 100, v * 100);
-	/* return space; */
 }
 
+ColorHSV color_hsv(struct Color color) {
+	printf("RGB: %d,%d,%d\n",  color.r, color.g, color.b);
+	double h, s, v;
+	gtk_rgb_to_hsv(color.r/255., color.g/255., color.b/255., &h, &s, &v);
+	ColorHSV clr = {
+		h * 360, s * 100, v * 100
+	};
+	return clr;
+}
+
+Color color_hsv_re(ColorHSV T) {
+	double r, g, b;
+	gtk_hsv_to_rgb(T.hue/360., T.saturation/100., T.value/100., &r, &g, &b);
+	Color c = {
+		.r = r * 255,
+		.g = g * 255,
+		.b = b * 255
+	};
+	return c;
+}
+
+/* -- GTK --*/
+
 // Apply a color to a widget's background
-void color_set_bg(struct Color *color_data, GtkWidget *widget, char* space) {
-	/* char* hex = malloc(8); */
-	color_to_hex(color_data, space);
-	GdkRGBA color;
-	gdk_rgba_parse(&color, space); // TODO: Dont use this :(
+void color_set_bg(struct Color *color_data, GtkWidget *widget) {
+	/* color_to_hex(color_data, space); */
+	/* GdkRGBA color; */
+	/* gdk_rgba_parse(&color, space); // TODO: Dont use this :( */
+	GdkRGBA color = {
+		.red = color_data->r / 255.,
+		.blue = color_data->b / 255.,
+		.green = color_data->g / 255.,
+		.alpha = 1
+	};
 	gtk_widget_override_background_color(widget, GTK_STATE_FLAG_NORMAL, &color);
-	/* free(hex); */
 }
 
 struct Color color_get_bg(GtkWidget *self) {
@@ -53,15 +81,7 @@ struct Color color_get_bg(GtkWidget *self) {
 }
 
 // Conform color to rgb limits
-static int color_conform(int c) {
-	if (c > 255) {
-		return 255;
-	} else if (c < 0) {
-		return 0;
-	} else {
-		return c;
-	}
-}
+#define color_conform(c) c > 255 ? 255 : ((c < 0) ? 0 : c)
 
 // Apply modification to all colors
 struct Color color_apply(struct Color *c, int amount) {
@@ -73,21 +93,7 @@ struct Color color_apply(struct Color *c, int amount) {
 	return out;
 }
 
-char *create_color_range_gradient(struct Color c, enum ColorChannel channel,char*buffer) {
-	/* char *buffer = malloc(80); */
-	switch(channel) {
-		case COLOR_CHANNEL_RED:
-			sprintf(buffer, "trough{background-image:linear-gradient(to right,#00%02x%02x,#ff%02x%02x);}", c.g, c.b, c.g, c.b);
-			break;
-		case COLOR_CHANNEL_BLUE:
-			sprintf(buffer, "trough{background-image:linear-gradient(to right,#%02x%02x00,#%02x%02xff);}", c.r, c.g, c.r, c.g);
-			break;
-		case COLOR_CHANNEL_GREEN:
-			sprintf(buffer, "trough{background-image:linear-gradient(to right,#%02x00%02x,#%02xff%02x);}", c.r, c.b, c.r, c.b);
-			break;
-	}
-	return buffer;
-}
+
 
 void color_get_dominant(const char*path, struct Color *c) {
 	// Get a image and scale it down to 1x1 to get the dominant color

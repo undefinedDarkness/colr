@@ -1,4 +1,3 @@
-a.out
-colr
 resources/*.c
 resources/*.h
+build
