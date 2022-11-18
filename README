@@ -10,7 +10,8 @@ INSTALL & USAGE
 ---------------
 $ git clone https://github.com/undefinedDarkness/colr.git 
 $ cd colr
-$ make
+$ meson build
+$ cd build && meson compile
 $ mv colr ~/.local/bin # Move to path
 
 To use it, run: `colr`
@@ -18,28 +19,10 @@ To use it, run: `colr`
 Requirements:
 Gtk3 Development Headers (libgtk-3-dev)
 X11  Development Headers (libx11-dev)
-
-Using external screenshot program:
-$ make build exe=<PROGRAM THAT OUTPUTS HEXCODE>
-
-While currently, complex picking behaviour is not supported, 
-I recommend you use https://github.com/Soft/xcolor as a external color picking program.
+Meson & Ninja
 
 TODO
 ----
-- Advanced color picking          ----
-- Better DnD image support         
-- Dynamic Colour Spaces            DONE
-- Refactor callbacks
-- Remove extras from CallbackData  DONE 
-- Create more structs
-- Change mouse cursor              DONE
-- Drag and drop support            DONE
-- Package resources correctly      DONE
-- Be more consistent with theme    DONE
-- Edit colors                      DONE
-- Deal with duplicate colors       DONE
-- Save picked colors to a file     DONE
-- Remove colors                    DONE
-- Allow external color picker      DONE
-- Placeholder Image                DONE
+- Extend HSV Support
+- Fix Clipboard Persistence
+- Restyle About Dialog
