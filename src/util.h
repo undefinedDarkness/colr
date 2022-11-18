@@ -18,4 +18,6 @@ void remove_current_color(UNUSED GtkWidget*self, struct CallbackData *data);
 void save_to_disk(UNUSED GtkWidget*self, GtkWidget*sidebar);
 void parse_colors_from_file(const char* path, struct CallbackData *ui);
 
+extern char modB[100]; // buffer shared for use within functions, note: never cleaned
+
 #endif

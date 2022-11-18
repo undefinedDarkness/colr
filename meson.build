@@ -10,7 +10,8 @@ src = [
   'src/util.c',
   'src/ui/ui.c',
   'src/color/color.c',
-  'src/ui/colorspace.c',
+  'src/ui/about.c',
+  'src/ui/init.c',
   # 'src/ui/editor.c',
   'src/ui/editor-hsv.c',
 

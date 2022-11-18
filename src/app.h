@@ -9,30 +9,37 @@
 
 /* -- MACROS -- */
 #define UNUSED __attribute__((unused))	
+#define SZ(arr) sizeof(arr)/sizeof(arr[0])
 
 // Shameful
 #define BOX gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0)
 
-#define ENABLED_COLOR_SPACES 2
-
 /* -- STRUCTURES -- */
-struct Colorspace {
-	GtkWidget *display;
-	void (*formatter)(struct Color*, char*);
-	char *fields[3];
-};
 
-struct CallbackData {
+// TODO: This structure is like a sticky goo infecting everything
+// I know its dumb, but I am really too lazy to fix it
+
+struct UIData {
 	GtkWidget *sidebar;
 	GtkWidget *panel;
+	GtkWidget *picker;
+	GtkWidget *window;
 
+	GtkWidget *rgb_display;
+	GtkWidget *hex_display;
+	GtkWidget *hsv_display;
+};
+typedef struct UIData UI;
+
+struct CallbackData {
+	UI* UI;
 	GtkWidget *color;
 	GtkWidget *color_light;
 	GtkWidget *color_dark;
-	
-	struct Colorspace* color_spaces;
+
 	struct Color color_data; // I am not entirely sure why we have this
 };
+typedef struct CallbackData STATE;
 
 enum FileTypes {
 	FT_PLAINTEXT,

@@ -3,13 +3,12 @@
 #include "ui/ui.h"
 #include <ctype.h>
 
+char modB[100];
+
 void paste_color_to_clipboard(UNUSED GtkWidget* parent, struct Color *c) {
 	GtkClipboard* clip = gtk_clipboard_get_default(gdk_display_get_default());
-	/* const char *to_paste = gtk_label_get_text(GTK_LABEL(source)); */
-	char *to_paste = malloc(8);
-	color_to_hex(c, to_paste);
-	gtk_clipboard_set_text(clip, to_paste, 8);
-	free(to_paste);
+	color_to_hex(*c,  modB);
+	gtk_clipboard_set_text(clip, modB, 8);
 }
 
 void button_cursor(GtkWidget *btn, char*cursor) {
@@ -21,10 +20,7 @@ void button_cursor(GtkWidget *btn, char*cursor) {
 void paste_label_to_clipboard(UNUSED GtkWidget* parent, GtkWidget *source) {
 	GtkClipboard* clip = gtk_clipboard_get_default(gdk_display_get_default());
 	const char *to_paste = gtk_label_get_text(GTK_LABEL(source));
-	/* char *to_paste = malloc(8); */
-	/* color_to_hex(&c, to_paste); */
-	gtk_clipboard_set_text(clip, to_paste, 8);
-	/* free(to_paste); */
+	gtk_clipboard_set_text(clip, to_paste, -1);
 }
 
 // Simply frees the 2nd item it gets
@@ -81,15 +77,13 @@ void save_to_disk(UNUSED GtkWidget*self, GtkWidget*sidebar) {
 
 void parse_colors_from_file(const char* path, struct CallbackData *ui) {
 	/* g_print("parsing from: '%s'\n", path); */
-	char *buf = malloc(10);
 	FILE *file = fopen(path, "r");
-	while (fgets(buf, 9, file)) {
-		buf[7] = '\0'; // strip newline
-		ui->color_data = color_from_hex(buf);
+	while (fgets(modB, 9, file)) {
+		modB[7] = '\0'; // strip newline
+		ui->color_data = color_from_hex(modB);
 		add_new_color(ui);	
 		/* g_print("%s", buf); */
 	}
-	free(buf);
 	fclose(file);
 }
 

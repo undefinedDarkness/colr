@@ -17,22 +17,21 @@ struct Color color_from_hex(char *hex)  {
 	return re;
 }
 
-void color_to_hex(struct Color *color, char*space) {
-	sprintf(space, "#%02x%02x%02x", color->r, color->g, color->b);
+void color_to_hex(struct Color color, char*space) {
+	sprintf(space, "#%02x%02x%02x", color.r, color.g, color.b);
 }
 
-void color_to_rgb(struct Color *color,char*space) {
-	sprintf(space, "rgb(%d,%d,%d)", color->r, color->g, color->b);
+void color_to_rgb(struct Color color,char*space) {
+	sprintf(space, "rgb(%d,%d,%d)", color.r, color.g, color.b);
 }
 
-void color_to_hsv(struct Color *color, char*space) {
+void color_to_hsv(struct Color color, char*space) {
 	double h, s, v;
-	gtk_rgb_to_hsv(color->r/255., color->g/255., color->b/255., &h, &s, &v);
+	gtk_rgb_to_hsv(color.r/255., color.g/255., color.b/255., &h, &s, &v);
 	sprintf(space, "hsv(%.0f,%.0f%%,%.0f%%)", h * 360, s * 100, v * 100);
 }
 
 ColorHSV color_hsv(struct Color color) {
-	printf("RGB: %d,%d,%d\n",  color.r, color.g, color.b);
 	double h, s, v;
 	gtk_rgb_to_hsv(color.r/255., color.g/255., color.b/255., &h, &s, &v);
 	ColorHSV clr = {
