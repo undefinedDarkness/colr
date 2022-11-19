@@ -1,7 +1,7 @@
 #include "util.h"
-#include "../resources/resources.h"
 #include "ui/ui.h"
 #include <ctype.h>
+
 
 char modB[100];
 

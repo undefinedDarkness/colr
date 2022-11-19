@@ -1,8 +1,6 @@
 #include "ui.h"
 #include "../util.h"
 
-void about_dialog(UNUSED GtkWidget* self, GtkWidget * parent);
-
 static GtkWidget *create_color_row(const char *label, GtkWidget *panel) {
 	GtkWidget *row = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 15);
 	gtk_style_context_add_class(gtk_widget_get_style_context(row), "color-row");
@@ -25,19 +23,22 @@ static GtkWidget *create_color_row(const char *label, GtkWidget *panel) {
 
 // Create right click menu
 // Callback data has no color
+
+void about_dialog(UNUSED GtkWidget *self, GtkWidget *parent);
+
 static GtkWidget *create_menu(struct CallbackData *state) {
 	GtkWidget *right_click_menu = gtk_menu_new();
-	
+
 	GtkWidget *items[] = {
 		gtk_menu_item_new_with_label("Save Palette"),
 		gtk_menu_item_new_with_label("Copy to Clipboard"),
 		gtk_menu_item_new_with_label("Remove Color"),
 		gtk_menu_item_new_with_label("About")
 	};
-
-	for (int i = 0; i < 4; i++)
+	for(int i = 0; i < sizeof(items)/sizeof(GtkWidget*); i++) {
 		gtk_container_add(GTK_CONTAINER(right_click_menu), items[i]);
-	
+	} 
+
 	g_signal_connect(G_OBJECT(items[3]), "activate", G_CALLBACK(about_dialog), state->UI->window);
 	g_signal_connect(G_OBJECT(items[2]), "activate", G_CALLBACK(remove_current_color), state);
 	g_signal_connect(G_OBJECT(items[1]), "activate", G_CALLBACK(save_to_disk), state->UI->sidebar);
@@ -60,7 +61,6 @@ static void on_first_display(UNUSED GtkWidget *self, STATE *ui) {
 }
 
 static void before_exit(UNUSED GtkWidget *self, void *_) {
-	printf("BYE\n");
 	GtkClipboard *clip = gtk_clipboard_get_default(gdk_display_get_default());
 	gtk_clipboard_store(clip);
 	gtk_main_quit();

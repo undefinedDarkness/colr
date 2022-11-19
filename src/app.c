@@ -2,7 +2,6 @@
 #include "util.h"
 #include "ui/ui.h"
 #include "ui/editor.h"
-#include "../resources/resources.h"
 
 static void add_new_color_from_pick(UNUSED GtkWidget *self, struct CallbackData *ui) {
 	if (color_pick(&ui->color_data) == -1) {
@@ -18,8 +17,9 @@ static void add_new_color_from_widget(GtkWidget *self, struct CallbackData *ui) 
 
 /* -- Init Subroutines {{{ */
 
+GResource *colr_get_resource();
 static void init_resource() {
-	GResource *res = index_get_resource();
+	GResource *res = colr_get_resource();
 	g_resources_register(res);
 	
 	GtkIconTheme *theme = gtk_icon_theme_get_default();

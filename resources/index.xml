@@ -2,6 +2,7 @@
 <gresources>
 	<gresource prefix="/undefinedDarkness/colr">
 		<file compressed="true">placeholder.png</file>
+		<file compressed="true">emma.png</file>
 		<file>app.css</file>
 	</gresource>
 	<gresource prefix="/undefinedDarkness/colr/icons/16x16/actions/">
