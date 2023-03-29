@@ -1,28 +1,27 @@
-  _   _   _   _      _   _   _   _   _
- / \ / \ / \ / \    / \ / \ / \ / \ / \
-( c | o | l | r |  | p | i | c | k | r )
- \_/ \_/ \_/ \_/    \_/ \_/ \_/ \_/ \_/ 
-
-https://i.imgur.com/QudIqH1.png
+![](https://i.imgur.com/QudIqH1.png)
 A simple color picker GUI for X11.
 
-INSTALL & USAGE
----------------
+## Install & Usage
+Obtain the binary package from the `./binaries/` folder:
+To install the deb package, run `sudo apt install ./*.deb`
+To use it, run: `colr`
+
+## Building
+
+```sh
 $ git clone https://github.com/undefinedDarkness/colr.git 
 $ cd colr
 $ meson build
 $ cd build && meson compile
 $ mv colr ~/.local/bin # Move to path
+```
 
-To use it, run: `colr`
-
-Requirements:
+Building Requirements:
 Gtk3 Development Headers (libgtk-3-dev)
 X11  Development Headers (libx11-dev)
 Meson & Ninja
 
-TODO
-----
+## Todo
 - Extend HSV Support
 - Fix Clipboard Persistence
 - Restyle About Dialog
