@@ -1,5 +1,7 @@
-![](https://i.imgur.com/QudIqH1.png)
+<p align="center">
+<img src="https://i.imgur.com/QudIqH1.png" /><br>
 A simple color picker GUI for X11.
+</p>
 
 ## Install & Usage
 Obtain the binary package from the `./binaries/` folder:
@@ -17,9 +19,9 @@ $ mv colr ~/.local/bin # Move to path
 ```
 
 Building Requirements:
-Gtk3 Development Headers (libgtk-3-dev)
-X11  Development Headers (libx11-dev)
-Meson & Ninja
+- Gtk3 Development Headers (libgtk-3-dev)
+- X11  Development Headers (libx11-dev)
+- Meson & Ninja
 
 ## Todo
 - Extend HSV Support
