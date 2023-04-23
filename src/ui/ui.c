@@ -10,17 +10,26 @@ void apply_style (GtkWidget *w, char*style) {
 void show_color(UNUSED GtkWidget *widget, struct CallbackData *data) {
 	struct Color color_light = color_apply(&data->color_data, 25);
 	struct Color color_dark = color_apply(&data->color_data, -25);
+
+
+	GList *children = gtk_container_get_children(GTK_CONTAINER(data->UI->sidebar));
+	GList* head = children;
+	children=children->next; // Skip picker button
+	struct Color previous = color_get_bg(data->color);
+	while (children != NULL) {
+			struct Color c = color_get_bg(children->data);
+			if (c.r == previous.r && c.g == previous.g && c.b == previous.b) {
+				color_set_bg(&data->color_data, children->data);
+				break;
+			}
+			children = children->next;
+	}	
+	g_list_free(head);
+
 	color_set_bg(&data->color_data, data->color);
 	color_set_bg(&color_light, data->color_light);
 	color_set_bg(&color_dark, data->color_dark);
-
-	/* char *color_text = malloc(20); */
-	/* for (int i = 0; i < ENABLED_COLOR_SPACES; i++) { */
-	/* 	struct Colorspace cs = data->color_spaces[i]; */
-	/* 	cs.formatter(&data->color_data, color_text); */
-	/* 	gtk_label_set_text(GTK_LABEL(cs.display), color_text); */
-	/* } */
-
+	
 	color_to_rgb(data->color_data, modB);
 	gtk_label_set_text(GTK_LABEL(data->UI->rgb_display), modB);
 	
@@ -37,6 +46,7 @@ void show_color(UNUSED GtkWidget *widget, struct CallbackData *data) {
 void add_new_color(struct CallbackData *data) {
 	// Check for duplicate colors
 	GList *children = gtk_container_get_children(GTK_CONTAINER(data->UI->sidebar));
+	GList* head = children;
 	children=children->next; // Skip picker button
 	while (children != NULL) {
 			struct Color c = color_get_bg(children->data);
@@ -45,7 +55,9 @@ void add_new_color(struct CallbackData *data) {
 				goto end;
 			}
 			children = children->next;
-	}	
+	}
+	g_list_free(head);
+
 
 	GtkWidget *button = gtk_button_new();
 
