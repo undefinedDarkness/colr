@@ -1,5 +1,6 @@
 #include "ui.h"
 #include "../util.h"
+#include <assert.h>
 
 static GtkWidget *create_color_row(const char *label, GtkWidget *panel) {
 	GtkWidget *row = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 15);
@@ -82,7 +83,7 @@ STATE init_ui() {
 	 */
 
 	static UI ui; // pretty much used throughout
-	STATE state;
+	static STATE state;
 
 	ui.window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title(GTK_WINDOW(ui.window), "Colr Pickr");
@@ -138,7 +139,7 @@ STATE init_ui() {
 	
 	g_signal_connect(G_OBJECT(ui.window), "destroy", G_CALLBACK(before_exit), NULL);
 	g_signal_connect(G_OBJECT(ui.window), "show", G_CALLBACK(on_first_display), &state);
-	
+
 	// Setup drag & drop
 	GtkTargetEntry targets[] = {
 		{ "text/plain", 0, FT_PLAINTEXT },
