@@ -12,19 +12,20 @@ void show_color(UNUSED GtkWidget *widget, struct CallbackData *data) {
 	struct Color color_dark = color_apply(&data->color_data, -25);
 
 
-	GList *children = gtk_container_get_children(GTK_CONTAINER(data->UI->sidebar));
-	GList* head = children;
-	children=children->next; // Skip picker button
-	struct Color previous = color_get_bg(data->color);
-	while (children != NULL) {
-			struct Color c = color_get_bg(children->data);
-			if (c.r == previous.r && c.g == previous.g && c.b == previous.b) {
-				color_set_bg(&data->color_data, children->data);
-				break;
-			}
-			children = children->next;
-	}	
-	g_list_free(head);
+	/* Have no clue what this code does */
+	/* GList *children = gtk_container_get_children(GTK_CONTAINER(data->UI->sidebar)); */
+	/* GList* head = children; */
+	/* children=children->next; // Skip picker button */
+	/* struct Color previous = color_get_bg(data->color); */
+	/* while (children != NULL) { */
+	/* 		struct Color c = color_get_bg(children->data); */
+	/* 		if (c.r == previous.r && c.g == previous.g && c.b == previous.b) { */
+	/* 			color_set_bg(&data->color_data, children->data); */
+	/* 			break; */
+	/* 		} */
+	/* 		children = children->next; */
+	/* } */	
+	/* g_list_free(head); */
 
 	color_set_bg(&data->color_data, data->color);
 	color_set_bg(&color_light, data->color_light);
