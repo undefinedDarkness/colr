@@ -30,3 +30,5 @@ Building Requirements:
 - Extend HSV Support
 - Fix Clipboard Persistence - Not easily fixed
 - Restyle About Dialog
+
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/a9a8c368-01b6-49e4-bad1-67b7ba74c899" />
